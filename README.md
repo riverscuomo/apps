@@ -1,5 +1,5 @@
 # apps
-a monorepo of all my python scripts, modules, and packages. I'm currently publishing this only to get help with some issues. Almost all of the files are gitignored.
+My monorepo of all my python scripts, modules, and packages. I'm currently publishing this only to get help with some issues. Almost all of the files are gitignored.
 
 ## Current Issue: How to run a package from another script
 
