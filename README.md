@@ -7,7 +7,7 @@ I have a python script `apps\maintenance.py` that imports a number of my package
 
 
 ## How to reproduce the error
-In the apps directory, run `py maintenance.py -m new_albums`. This should run the script that imports and runs the `apps\new_albums` package. You should see some variation of this error:
+In the `apps` directory, run `py maintenance.py -m new_albums`. This should run the script that imports and runs the `apps\new_albums` package. You should see some variation of this error:
 
 `module 'new_albums' has no attribute 'main'`
 
