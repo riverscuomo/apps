@@ -7,15 +7,9 @@ today = datetime.now()
 pattern = "%A, %B %d,  %H:%M %p"
 pattern = "%B %d, %Y %H:%M %p"
 todayString = today.strftime(pattern)
-
 COMPUTERNAME = os.environ["COMPUTERNAME"]
-
 failure_message = "FAILURE!: \n\n"
-
 base_path = r"C:\RC Dropbox\Rivers Cuomo\Apps"
-
-# print(COMPUTERNAME)
-
 
 logging.basicConfig(
     filename="maintenance_log.txt",
