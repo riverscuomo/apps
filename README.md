@@ -9,6 +9,8 @@ I have a python script `maintenance.py` that imports a number of my packages and
 ## How to reproduce the error
 In the apps directory, run `py maintenance.py -m new_albums`. This should run the script that imports and runs the `new_albums` package. You should see this error:
 
+`module 'new_albums' has no attribute 'main'`
+
 Finally, the `new_albums` package runs fine if change to the `new_albums` package directory and run  `py new_albums`.
 
 Is there something wrong with the way I've set up the `new_albums` package with poetry? I should be able to import and run its `main` function, correct?
