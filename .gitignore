@@ -44,6 +44,10 @@ ultimateplaylist/
 webserver/
 z-previous/
 
+kyoko_copy/
+maintenance_config_copy.py
+pool_copy.py
+
 # apps modules
 anki.mp3
 ankiaudiofilename.py
