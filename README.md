@@ -16,4 +16,4 @@ Finally, the `new_albums` package runs fine if change to the `new_albums` packag
 Is there something wrong with the way I've set up the `new_albums` package with poetry? I should be able to import and run its `main` function, correct?
 
 ## Note:
-The most relevant part of the code is the `run()` function (here)[https://github.com/riverscuomo/apps/blob/49cd496e243b26cdb9ac867aee87b0553118d054/maintenance.py#L375]  in `maintenance.py`.
+The most relevant part of the code is the `run()` function https://github.com/riverscuomo/apps/blob/49cd496e243b26cdb9ac867aee87b0553118d054/maintenance.py#L375 in `maintenance.py`.
