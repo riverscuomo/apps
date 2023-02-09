@@ -15879,3 +15879,52 @@ INFO: 02/09/2023 06:02:33 MAINTENANCE.PY
 INFO: 02/09/2023 06:02:33 [<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>]
 INFO: 02/09/2023 06:02:33  
 INFO: 02/09/2023 06:02:33 this_import=<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>
+INFO: 02/09/2023 06:15:43 ==========================================================
+INFO: 02/09/2023 06:15:43 MAINTENANCE.PY
+INFO: 02/09/2023 06:15:43 []
+INFO: 02/09/2023 06:15:45 ==========================================================
+INFO: 02/09/2023 06:15:45 MAINTENANCE.PY
+INFO: 02/09/2023 06:15:45 [<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>]
+INFO: 02/09/2023 06:15:45  
+INFO: 02/09/2023 06:15:45 this_import=<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>
+INFO: 02/09/2023 06:25:54 ==========================================================
+INFO: 02/09/2023 06:25:54 MAINTENANCE.PY
+INFO: 02/09/2023 06:25:54 [<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>]
+INFO: 02/09/2023 06:25:54  
+INFO: 02/09/2023 06:25:54 this_import=<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>
+INFO: 02/09/2023 06:26:07 ==========================================================
+INFO: 02/09/2023 06:26:07 MAINTENANCE.PY
+INFO: 02/09/2023 06:26:07 [<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>]
+INFO: 02/09/2023 06:26:07  
+INFO: 02/09/2023 06:26:07 this_import=<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>
+INFO: 02/09/2023 06:26:07 
+INFO: 02/09/2023 06:27:28 ==========================================================
+INFO: 02/09/2023 06:27:28 MAINTENANCE.PY
+INFO: 02/09/2023 06:27:28 [<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>]
+INFO: 02/09/2023 06:27:28  
+INFO: 02/09/2023 06:27:28 this_import=<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>
+INFO: 02/09/2023 06:27:28 
+INFO: 02/09/2023 06:28:02 ==========================================================
+INFO: 02/09/2023 06:28:02 MAINTENANCE.PY
+INFO: 02/09/2023 06:28:02 [<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>]
+INFO: 02/09/2023 06:28:02  
+INFO: 02/09/2023 06:28:02 this_import=<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>
+INFO: 02/09/2023 06:29:32 ==========================================================
+INFO: 02/09/2023 06:29:32 MAINTENANCE.PY
+INFO: 02/09/2023 06:29:32 [<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>]
+INFO: 02/09/2023 06:29:32  
+INFO: 02/09/2023 06:29:32 this_import=<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>
+INFO: 02/09/2023 06:30:42 ==========================================================
+INFO: 02/09/2023 06:30:42 MAINTENANCE.PY
+INFO: 02/09/2023 06:30:42 [<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>]
+INFO: 02/09/2023 06:30:42  
+INFO: 02/09/2023 06:30:42 this_import=<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>
+INFO: 02/09/2023 06:30:42 run_poetry_package
+INFO: 02/09/2023 06:30:42 package_name=new_albums
+INFO: 02/09/2023 06:30:42 setup_file_name=new_albums.__main__
+INFO: 02/09/2023 06:31:00 ==========================================================
+INFO: 02/09/2023 06:31:00 MAINTENANCE.PY
+INFO: 02/09/2023 06:31:00 [<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>]
+INFO: 02/09/2023 06:31:00  
+INFO: 02/09/2023 06:31:00 this_import=<Import module_name:new_albums setup_file_name:new_albums.__main__ path:C:\RC Dropbox\Rivers Cuomo\Apps\new_albums>
+INFO: 02/09/2023 06:31:00 

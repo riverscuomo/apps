@@ -377,18 +377,17 @@ def run():
         if package_name in ["new_albums"]:
             # run_poetry_package(package_name, setup_file_name, path, report)
 
-            # setup_module = importlib.import_module("new_albums")
-            # analyze_module(setup_module)
+            setup_module = importlib.import_module("new_albums")
+            run_main(setup_module)
 
-            # setup_module = importlib.import_module("new_albums", package="new_albums")
-            # analyze_module(setup_module)
+            setup_module = importlib.import_module("new_albums", package="new_albums")
+            run_main(setup_module)
 
             setup_module = importlib.import_module("new_albums.new_albums", package="new_albums.new_albums")  
+            run_main(setup_module)
 
-            analyze_module(setup_module)
-
-            r = runpy.run_module("new_albums.new_albums", run_name="__main__")
-            print(r)
+            # r = runpy.run_module("new_albums.new_albums", run_name="__main__")
+            # print(r)
 
                             
 
@@ -440,7 +439,8 @@ def run():
 
     return result
 
-def analyze_module(setup_module):
+def run_main(setup_module):
+    """ inspect and run the main() function of a module"""
     print(setup_module)
     print(dir(setup_module))
     try:
