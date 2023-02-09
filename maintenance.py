@@ -1,4 +1,6 @@
 import contextlib
+import pkgutil
+import runpy
 import sys
 from datetime import datetime
 from maintenance_config import *
@@ -374,34 +376,21 @@ def run():
 
         if package_name in ["new_albums"]:
             # run_poetry_package(package_name, setup_file_name, path, report)
-            
-            setup_module = importlib.import_module("new_albums")    
-            print(setup_module)
-            print(dir(setup_module))        
-            try:
-                setup_module.main()
-            except Exception as e:
-                print(e)
 
-            setup_module = importlib.import_module("new_albums", package="new_albums")            
-            try:
-                setup_module.main()
-            except Exception as e:
-                print(e)
+            # setup_module = importlib.import_module("new_albums")
+            # analyze_module(setup_module)
 
-            setup_module = importlib.import_module("new_albums.new_albums")            
-            try:
-                setup_module.main()
-            except Exception as e:
-                print(e)
+            # setup_module = importlib.import_module("new_albums", package="new_albums")
+            # analyze_module(setup_module)
 
-            setup_module = importlib.import_module("new_albums.new_albums")            
-            try:
-                setup_module.main()
-            except Exception as e:
-                print(e)
+            setup_module = importlib.import_module("new_albums.new_albums", package="new_albums.new_albums")  
 
-            
+            analyze_module(setup_module)
+
+            r = runpy.run_module("new_albums.new_albums", run_name="__main__")
+            print(r)
+
+                            
 
         # elif package_name in ["kyoko"]:
 
@@ -450,6 +439,17 @@ def run():
         logging.info(x.message)
 
     return result
+
+def analyze_module(setup_module):
+    print(setup_module)
+    print(dir(setup_module))
+    try:
+        setup_module.main()
+    except Exception as e:
+        print(e)
+
+    for importer, modname, ispkg in pkgutil.iter_modules(setup_module.__path__):
+        print(f"Found submodule {modname} (is a package: {ispkg})")
 
 
 def main():
