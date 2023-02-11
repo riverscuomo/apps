@@ -1,31 +1,31 @@
-import contextlib
-import pkgutil
+# import contextlib
+# import pkgutil
+# from datetime import datetime
+# from maintenance_config import *
+# # from maintenance_config_copy import *
+# import gspreader
+from rich import print
+# import os
+# import argparse
+import traceback
 import runpy
 import sys
-from datetime import datetime
-from maintenance_config import *
-# from maintenance_config_copy import *
-import gspreader
-from rich import print
-import os
 import importlib
-import argparse
-import traceback
 
 
-maintenance_parser = argparse.ArgumentParser(
-    description="Runs many modules in the Apps folder.")
-maintenance_parser.add_argument(
-    "-m",
-    "--module",
-    help="A specific module to run. simply put the name of one of the scripts (without the .py)",
-)
-maintenance_parser.add_argument(
-    "-t",
-    "--type",
-    help="The type of run: short, long, weekly. for a shortRun only: py maintenance.py s ",
-)
-args = maintenance_parser.parse_args()
+# maintenance_parser = argparse.ArgumentParser(
+#     description="Runs many modules in the Apps folder.")
+# maintenance_parser.add_argument(
+#     "-m",
+#     "--module",
+#     help="A specific module to run. simply put the name of one of the scripts (without the .py)",
+# )
+# maintenance_parser.add_argument(
+#     "-t",
+#     "--type",
+#     help="The type of run: short, long, weekly. for a shortRun only: py maintenance.py s ",
+# )
+# args = maintenance_parser.parse_args()
 
 """
     Windows Task Scheduler runs all "longrun" programs here at 0:01 every morning.
@@ -377,17 +377,17 @@ def run():
         if package_name in ["new_albums"]:
             # run_poetry_package(package_name, setup_file_name, path, report)
 
-            setup_module = importlib.import_module("new_albums")
-            run_main(setup_module)
+            # setup_module = importlib.import_module("new_albums")
+            # run_main(setup_module)
 
-            setup_module = importlib.import_module("new_albums", package="new_albums")
-            run_main(setup_module)
+            # setup_module = importlib.import_module("new_albums", package="new_albums")
+            # run_main(setup_module)
 
-            setup_module = importlib.import_module("new_albums.new_albums", package="new_albums.new_albums")  
-            run_main(setup_module)
+            # setup_module = importlib.import_module("new_albums.new_albums", package="new_albums.new_albums")  
+            # run_main(setup_module)
 
-            # r = runpy.run_module("new_albums.new_albums", run_name="__main__")
-            # print(r)
+            r = runpy.run_module("new_albums", run_name="__main__")
+            print(r)
 
                             
 
@@ -439,6 +439,7 @@ def run():
 
     return result
 
+
 def run_main(setup_module):
     """ inspect and run the main() function of a module"""
     print(setup_module)
@@ -454,14 +455,41 @@ def run_main(setup_module):
 
 def main():
 
-    print(f"Running maintenance.py with args {args}")
-    result = run()
+    try:
+        print("\nOption 1:")
+        runpy.run_module("new_albums", run_name="__main__")
+    except Exception as e:
+        e = traceback.format_exc() 
+        print(e)
 
-    print_to_sheet = False
+    try:
+        print("\nOption 2:")
+        importlib.import_module("new_albums.__main__").main()
+    except Exception as e:
+        e = traceback.format_exc() 
+        print(e)
 
-    if print_to_sheet:
+    try:
+        print("\nOption 3:")
+        # importlib.import_module("new_albums.__main__").main()
+    except Exception as e:
+        e = traceback.format_exc() 
+        print(e)
 
-        print_result_to_sheet(result)
+    print('\nprint(sys.modules["new_albums"]):')
+    print(sys.modules["new_albums"])
+
+    
+
+
+    # print(f"Running maintenance.py with args {args}")
+    # result = run()
+
+    # print_to_sheet = False
+
+    # if print_to_sheet:
+
+    #     print_result_to_sheet(result)
 
 
 if __name__ == "__main__":
