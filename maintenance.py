@@ -456,14 +456,12 @@ def run_main(setup_module):
 def main():
 
     """ Test poetry package new_albums: passes """
-    # try:
-    #     print("\nnew_albums:")
-    #     importlib.import_module("new_albums.__main__").main()
-    # except Exception as e:
-    #     e = traceback.format_exc() 
-    #     print(e)
-
-    
+    try:
+        print("\nnew_albums:")
+        importlib.import_module("new_albums.__main__").main()
+    except Exception as e:
+        e = traceback.format_exc() 
+        print(e)
 
     """ Test module: passes """
     # try:
@@ -481,6 +479,14 @@ def main():
         e = traceback.format_exc() 
         print(e)
 
+    """ Test poetry package: passes """
+    try:
+        print("\nsocial:")
+        importlib.import_module("social.social.__main__").main()
+    except Exception as e:
+        e = traceback.format_exc() 
+        print(e)
+
     """ Test poetry package works but gets a warning """
     # try:
     #     print("\nOption 1:")
@@ -490,26 +496,6 @@ def main():
     #     print(e)
 
     
-
-
-    
-
-    
-
-    
-
-    # try:
-    #     print("\nOption 3:")
-    #     # importlib.import_module("new_albums.__main__").main()
-    # except Exception as e:
-    #     e = traceback.format_exc() 
-    #     print(e)
-
-    # print('\nprint(sys.modules["new_albums"]):')
-    # print(sys.modules["new_albums"])
-
-    
-
 
     # print(f"Running maintenance.py with args {args}")
     # result = run()
