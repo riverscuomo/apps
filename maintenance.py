@@ -455,29 +455,50 @@ def run_main(setup_module):
 
 def main():
 
-    try:
-        print("\nOption 1:")
-        runpy.run_module("new_albums", run_name="__main__")
-    except Exception as e:
-        e = traceback.format_exc() 
-        print(e)
+    """ Test poetry package works but gets a warning """
+    # try:
+    #     print("\nOption 1:")
+    #     runpy.run_module("new_albums", run_name="__main__")
+    # except Exception as e:
+    #     e = traceback.format_exc() 
+    #     print(e)
 
+    """ Test poetry package passes """
     try:
-        print("\nOption 2:")
+        print("\nnew_albums:")
         importlib.import_module("new_albums.__main__").main()
     except Exception as e:
         e = traceback.format_exc() 
         print(e)
 
+
+    """ Test module: passes """
+    # try:
+    #     print("\nPool:")
+    #     importlib.import_module("pool").main()
+    # except Exception as e:
+    #     e = traceback.format_exc() 
+    #     print(e)
+
+    """ Test poetry package ... """
     try:
-        print("\nOption 3:")
-        # importlib.import_module("new_albums.__main__").main()
+        print("\nsocial:")
+        importlib.import_module("social.__main__").main()
     except Exception as e:
         e = traceback.format_exc() 
         print(e)
 
-    print('\nprint(sys.modules["new_albums"]):')
-    print(sys.modules["new_albums"])
+    
+
+    # try:
+    #     print("\nOption 3:")
+    #     # importlib.import_module("new_albums.__main__").main()
+    # except Exception as e:
+    #     e = traceback.format_exc() 
+    #     print(e)
+
+    # print('\nprint(sys.modules["new_albums"]):')
+    # print(sys.modules["new_albums"])
 
     
 
