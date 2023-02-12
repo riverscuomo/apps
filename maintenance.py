@@ -455,10 +455,20 @@ def run_main(setup_module):
 
 def main():
 
-    """ Test poetry package works but gets a warning """
+    """ Test poetry package new_albums: passes """
     # try:
-    #     print("\nOption 1:")
-    #     runpy.run_module("new_albums", run_name="__main__")
+    #     print("\nnew_albums:")
+    #     importlib.import_module("new_albums.__main__").main()
+    # except Exception as e:
+    #     e = traceback.format_exc() 
+    #     print(e)
+
+    
+
+    """ Test module: passes """
+    # try:
+    #     print("\nPool:")
+    #     importlib.import_module("pool").main()
     # except Exception as e:
     #     e = traceback.format_exc() 
     #     print(e)
@@ -471,22 +481,18 @@ def main():
         e = traceback.format_exc() 
         print(e)
 
-    """ Test poetry package: passes """
-    try:
-        print("\nnew_albums:")
-        importlib.import_module("new_albums.__main__").main()
-    except Exception as e:
-        e = traceback.format_exc() 
-        print(e)
-
-
-    """ Test module: passes """
+    """ Test poetry package works but gets a warning """
     # try:
-    #     print("\nPool:")
-    #     importlib.import_module("pool").main()
+    #     print("\nOption 1:")
+    #     runpy.run_module("new_albums", run_name="__main__")
     # except Exception as e:
     #     e = traceback.format_exc() 
     #     print(e)
+
+    
+
+
+    
 
     
 
