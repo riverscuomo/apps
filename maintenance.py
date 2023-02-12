@@ -479,13 +479,13 @@ def main():
         e = traceback.format_exc() 
         print(e)
 
-    """ Test poetry package: passes """
-    try:
-        print("\nsocial:")
-        importlib.import_module("social.social.__main__").main()
-    except Exception as e:
-        e = traceback.format_exc() 
-        print(e)
+    # """ Test poetry package: passes """
+    # try:
+    #     print("\nsocial:")
+    #     importlib.import_module("social.social.__main__").main()
+    # except Exception as e:
+    #     e = traceback.format_exc() 
+    #     print(e)
 
     """ Test poetry package works but gets a warning """
     # try:
