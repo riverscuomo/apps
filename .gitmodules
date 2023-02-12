@@ -1,3 +1,6 @@
 [submodule "new_albums"]
 	path = new_albums
 	url = https://github.com/riverscuomo/new-albums.git
+[submodule "social"]
+	path = social
+	url = https://github.com/riverscuomo/social.git

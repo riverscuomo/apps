@@ -463,7 +463,15 @@ def main():
     #     e = traceback.format_exc() 
     #     print(e)
 
-    """ Test poetry package passes """
+    """ Test poetry package: ... """
+    try:
+        print("\nsocial:")
+        importlib.import_module("social.__main__").main()
+    except Exception as e:
+        e = traceback.format_exc() 
+        print(e)
+
+    """ Test poetry package: passes """
     try:
         print("\nnew_albums:")
         importlib.import_module("new_albums.__main__").main()
@@ -480,13 +488,7 @@ def main():
     #     e = traceback.format_exc() 
     #     print(e)
 
-    """ Test poetry package ... """
-    try:
-        print("\nsocial:")
-        importlib.import_module("social.__main__").main()
-    except Exception as e:
-        e = traceback.format_exc() 
-        print(e)
+    
 
     
 
