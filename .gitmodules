@@ -4,3 +4,6 @@
 [submodule "social"]
 	path = social
 	url = https://github.com/riverscuomo/social.git
+[submodule "crawlers"]
+	path = crawlers
+	url = https://github.com/riverscuomo/crawlers.git
