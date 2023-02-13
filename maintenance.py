@@ -465,37 +465,31 @@ def main():
     #     e = traceback.format_exc() 
     #     print(e)
 
-
-    """ THESE DON'T WORK YET """
-
-    """ Test module: passes """
-    try:
-        print("\nPool:")
-        importlib.import_module("pool").main()
-    except Exception as e:
-        e = traceback.format_exc() 
-        print(e)
-
-    # """ Test poetry package: ... """
+    # """ Test module: passes """
     # try:
-    #     print("\nsocial:")
-    #     importlib.import_module("social.__main__").main()
+    #     print("\nPool:")
+    #     importlib.import_module("pool").main()
     # except Exception as e:
     #     e = traceback.format_exc() 
     #     print(e)
+
+
+    """ THESE DON'T WORK YET """
+
+    
+
+    """ Test poetry package: ... """
+    try:
+        print("\nsocial:")
+        importlib.import_module("social.__main__").main()
+    except Exception as e:
+        e = traceback.format_exc() 
+        print(e)
 
     # """ Test poetry package: passes """
     # try:
     #     print("\nsocial:")
     #     importlib.import_module("social.social.__main__").main()
-    # except Exception as e:
-    #     e = traceback.format_exc() 
-    #     print(e)
-
-    """ Test poetry package works but gets a warning """
-    # try:
-    #     print("\nOption 1:")
-    #     runpy.run_module("new_albums", run_name="__main__")
     # except Exception as e:
     #     e = traceback.format_exc() 
     #     print(e)
