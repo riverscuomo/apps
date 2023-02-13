@@ -455,7 +455,7 @@ def run_main(setup_module):
 
 def main():
 
-    """ THESE WORK """
+    """ THESE WORK (but you must run `pip install .` in each package directory first) """
 
     # """ Test poetry package new_albums: passes """
     # try:
@@ -473,19 +473,6 @@ def main():
     #     e = traceback.format_exc() 
     #     print(e)
 
-
-    """ THESE DON'T WORK YET """
-
-    
-
-    """ Test poetry package: ... """
-    try:
-        print("\nsocial:")
-        importlib.import_module("social.__main__").main()
-    except Exception as e:
-        e = traceback.format_exc() 
-        print(e)
-
     # """ Test poetry package: passes """
     # try:
     #     print("\nsocial:")
@@ -494,7 +481,39 @@ def main():
     #     e = traceback.format_exc() 
     #     print(e)
 
+    # """ Test poetry package: ... """
+    # try:
+    #     print("\nsocial:")
+    #     importlib.import_module("social.__main__").main()
+    # except Exception as e:
+    #     e = traceback.format_exc() 
+    #     print(e)
+
+    # """ Test poetry package spotnik: passes """
+    # try:
+    #     print("\nspotnik:")
+    #     importlib.import_module("spotnik.__main__").main()
+    # except Exception as e:
+    #     e = traceback.format_exc() 
+    #     print(e)
+
+
+    """ THESE DON'T WORK YET """
+
+    """ Test poetry package spotnik: passes """
+    try:
+        print("\n lastfmcrawler :")
+        importlib.import_module("lastfmcrawler.__main__").main()
+    except Exception as e:
+        e = traceback.format_exc() 
+        print(e)
+
     
+
+    
+
+    
+
 
     # print(f"Running maintenance.py with args {args}")
     # result = run()
