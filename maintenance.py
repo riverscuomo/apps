@@ -455,7 +455,7 @@ def run_main(setup_module):
 
 def main():
 
-    """ THESE WORK (but you must run `pip install .` in each package directory first) """
+    """ THESE WORK (but you must run `pip install .` or `poetry install` in each package directory first) """
 
     # """ Test poetry package new_albums: passes """
     # try:
@@ -469,14 +469,6 @@ def main():
     # try:
     #     print("\nPool:")
     #     importlib.import_module("pool").main()
-    # except Exception as e:
-    #     e = traceback.format_exc() 
-    #     print(e)
-
-    # """ Test poetry package: passes """
-    # try:
-    #     print("\nsocial:")
-    #     importlib.import_module("social.social.__main__").main()
     # except Exception as e:
     #     e = traceback.format_exc() 
     #     print(e)
@@ -503,7 +495,7 @@ def main():
     """ Test poetry package spotnik: passes """
     try:
         print("\n lastfmcrawler :")
-        importlib.import_module("lastfmcrawler.__main__").main()
+        importlib.import_module("crawlers.lastfmcrawler.__main__").main()
     except Exception as e:
         e = traceback.format_exc() 
         print(e)
