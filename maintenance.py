@@ -455,29 +455,34 @@ def run_main(setup_module):
 
 def main():
 
-    """ Test poetry package new_albums: passes """
-    try:
-        print("\nnew_albums:")
-        importlib.import_module("new_albums.__main__").main()
-    except Exception as e:
-        e = traceback.format_exc() 
-        print(e)
+    """ THESE WORK """
 
-    """ Test module: passes """
+    # """ Test poetry package new_albums: passes """
     # try:
-    #     print("\nPool:")
-    #     importlib.import_module("pool").main()
+    #     print("\nnew_albums:")
+    #     importlib.import_module("new_albums.__main__").main()
     # except Exception as e:
     #     e = traceback.format_exc() 
     #     print(e)
 
-    """ Test poetry package: ... """
+
+    """ THESE DON'T WORK YET """
+
+    """ Test module: passes """
     try:
-        print("\nsocial:")
-        importlib.import_module("social.__main__").main()
+        print("\nPool:")
+        importlib.import_module("pool").main()
     except Exception as e:
         e = traceback.format_exc() 
         print(e)
+
+    # """ Test poetry package: ... """
+    # try:
+    #     print("\nsocial:")
+    #     importlib.import_module("social.__main__").main()
+    # except Exception as e:
+    #     e = traceback.format_exc() 
+    #     print(e)
 
     # """ Test poetry package: passes """
     # try:

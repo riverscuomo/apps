@@ -1,5 +1,5 @@
 import asyncio
-# import iaqualink
+import iaqualink
 from iaqualink import AqualinkClient
 from rich import print
 from datetime import datetime
@@ -11,9 +11,9 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
-"""
-I think this depends on this old version: iaqualink==0.3.90
-"""
+# """
+# I think this depends on this old version: iaqualink==0.3.90
+# """
 
 username = os.environ.get("POOL_USER")
 password = os.environ.get("POOL_PASSWORD")
