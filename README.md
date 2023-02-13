@@ -10,3 +10,7 @@ maintenance.py is a master script that imports and runs many other Scripts, some
 Next up I'd like to tackle "crawlers", which right now is a directory within apps which has three packages in it, spotifycrawler, LastFMcrawler and a package of common code called core. I'd like maintenance.py to be able to import and run spotifycrawler and LastFMcrawler.
 
 Please let me know if this doesn't seem like a reasonable way to import and run a large number of packages on a regular schedule.
+
+
+![image](https://user-images.githubusercontent.com/24362267/218493412-d48bccbd-54e4-462a-987d-bd23849c1b3e.png)
+
