@@ -95,7 +95,7 @@ ocr.py
 package-lock.json
 photodate.py
 Pipfile
-pool.py
+# pool.py
 py
 quote_source_lyric_reference.py
 rctweetcleaner-3d2160633739.json
