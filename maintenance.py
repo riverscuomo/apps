@@ -1,31 +1,31 @@
-# import contextlib
-# import pkgutil
-# from datetime import datetime
-# from maintenance_config import *
-# # from maintenance_config_copy import *
-# import gspreader
+import contextlib
+import pkgutil
+from datetime import datetime
+from maintenance_config import *
+# from maintenance_config_copy import *
+import gspreader
 from rich import print
-# import os
-# import argparse
+import os
+import argparse
 import traceback
 import runpy
 import sys
 import importlib
 
 
-# maintenance_parser = argparse.ArgumentParser(
-#     description="Runs many modules in the Apps folder.")
-# maintenance_parser.add_argument(
-#     "-m",
-#     "--module",
-#     help="A specific module to run. simply put the name of one of the scripts (without the .py)",
-# )
-# maintenance_parser.add_argument(
-#     "-t",
-#     "--type",
-#     help="The type of run: short, long, weekly. for a shortRun only: py maintenance.py s ",
-# )
-# args = maintenance_parser.parse_args()
+maintenance_parser = argparse.ArgumentParser(
+    description="Runs many modules in the Apps folder.")
+maintenance_parser.add_argument(
+    "-m",
+    "--module",
+    help="A specific module to run. simply put the name of one of the scripts (without the .py)",
+)
+maintenance_parser.add_argument(
+    "-t",
+    "--type",
+    help="The type of run: short, long, weekly. for a shortRun only: py maintenance.py s ",
+)
+args = maintenance_parser.parse_args()
 
 """
     Windows Task Scheduler runs all "longrun" programs here at 0:01 every morning.
@@ -241,14 +241,15 @@ def initialize_import(this_import):
     logging.info(" ")
     logging.info(f"this_import={this_import}")
 
-    package_name = this_import.module_name
-    setup_file_name = (this_import.setup_file_name)  # will be None if it's simply a module within Apps
-    path = this_import.path
+    module_name = this_import.module_name
+    module_path = this_import.module_path
+    # # setup_file_name = (this_import.setup_file_name)  # will be None if it's simply a module within Apps
+    # path = this_import.path
 
     # Initialize a new report object for this import
-    report = Report(todayString, package_name, this_import.description)
+    report = Report(todayString, module_name, this_import.description)
 
-    return package_name,setup_file_name,path, report
+    return module_name, module_path, report
 
 
 def print_result_to_sheet(result: list):
@@ -278,84 +279,86 @@ def print_result_to_sheet(result: list):
     gspreader.update_range(sheet, data)
 
 
-def run_apps_module(report, module_name):
+def run_module(report, module_path):
     """ Import a script from the current directory (Apps), run its main() function, and return the report."""
-    new_module = importlib.import_module(module_name)
-    logging.info(f"Successfully imported {module_name}. Now time to run its main()....")
+    new_module = importlib.import_module(module_path)
+    logging.info(f"Successfully imported {module_path}. Now time to run its main()....")
     try:
         r = new_module.main()
         report.message = str(r)
+        logging.info(str(r))
     except Exception as e:
-        r = f"Failure in {module_name}.main(): <{e}>"
+        r = f"Failure in {module_path}.main(): <{e}>"
         report.message = str(r)
+        logging.info(r)
     return report
 
 
-def run_bat_file():
+# def run_bat_file():
     
-    # BAT FILE WORKS FOR DEMOS BUT NO RETURN VALUE
-    bat_dir = "C:\RC Dropbox\Rivers Cuomo\Apps\Z-BAT"
-    bat_dir = "C:\RC Dropbox\Rivers Cuomo\Apps\demos"
+#     # BAT FILE WORKS FOR DEMOS BUT NO RETURN VALUE
+#     bat_dir = "C:\RC Dropbox\Rivers Cuomo\Apps\Z-BAT"
+#     bat_dir = "C:\RC Dropbox\Rivers Cuomo\Apps\demos"
 
 
-def run_crawler_package(package_name, setup_file_name, report):
-    logging.info(f"package_name.setup_file_name={package_name}.{setup_file_name}")
-    setup_module = importlib.import_module(
-        f"crawlers.{package_name}",
-        # package=f"{crawlers}",
-    )
-    try:
-        r = setup_module.main()
-    except Exception as e:
-        logging.info(f"Failure to run {setup_module}.main():\n{e}")
-        r = f"Failure:\n{e}"
-    report.message = str(r)    
-    return report
+# def run_crawler_package(package_name, setup_file_name, report):
+#     logging.info(f"package_name.setup_file_name={package_name}.{setup_file_name}")
+#     setup_module = importlib.import_module(
+#         f"crawlers.{package_name}",
+#         # package=f"{crawlers}",
+#     )
+#     try:
+#         r = setup_module.main()
+#     except Exception as e:
+#         logging.info(f"Failure to run {setup_module}.main():\n{e}")
+#         r = f"Failure:\n{e}"
+#     report.message = str(r)    
+#     return report
 
 
-def run_modern_way(this_import):
-    MODULE_PATH = this_import.path + "\\__init__.py"
-    MODULE_NAME = this_import.module_name
-    spec = importlib.util.spec_from_file_location(MODULE_NAME, MODULE_PATH)
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = module 
-    spec.loader.exec_module(module)
-    module.main()
+# def run_modern_way(this_import):
+#     MODULE_PATH = this_import.path + "\\__init__.py"
+#     MODULE_NAME = this_import.module_name
+#     spec = importlib.util.spec_from_file_location(MODULE_NAME, MODULE_PATH)
+#     module = importlib.util.module_from_spec(spec)
+#     sys.modules[spec.name] = module 
+#     spec.loader.exec_module(module)
+#     module.main()
 
 
-def run_package_but_not_poetry(package_name, setup_file_name, report):
-    logging.info(f"package_name.setup_file_name={package_name}.{setup_file_name}")
-    setup_module = importlib.import_module(
-        f"{package_name}",
-        package=f"{package_name}",
-    )
-    try:
-        r = setup_module.main()
-    except Exception as e:
-        logging.info(f"Failure to run {setup_module}.main():\n{e}")
-        r = f"Failure:\n{e}"
-    report.message = str(r)    
-    return report
+# def run_package_but_not_poetry(package_name, setup_file_name, report):
+#     logging.info(f"package_name.setup_file_name={package_name}.{setup_file_name}")
+#     setup_module = importlib.import_module(
+#         f"{package_name}",
+#         package=f"{package_name}",
+#     )
+#     try:
+#         r = setup_module.main()
+#     except Exception as e:
+#         logging.info(f"Failure to run {setup_module}.main():\n{e}")
+#         r = f"Failure:\n{e}"
+#     report.message = str(r)    
+#     return report
 
 
-def run_poetry_package(package_name, setup_file_name, path, report):
-    """ Import and run a package that uses Poetry."""
+# def run_poetry_package(package_name, setup_file_name, path, report):
+#     """ Import and run a package that uses Poetry."""
 
-    logging.info("run_poetry_package")
-    logging.info(f"package_name={package_name}")
-    logging.info(f"setup_file_name={setup_file_name}")
-    setup_module = importlib.import_module(f"{package_name}.{setup_file_name}")
-    logging.info(f"Successfully imported setup module {setup_module} from PACKAGE {package_name}. Now time to run its main()....")
+#     logging.info("run_poetry_package")
+#     logging.info(f"package_name={package_name}")
+#     logging.info(f"setup_file_name={setup_file_name}")
+#     setup_module = importlib.import_module(f"{package_name}.{setup_file_name}")
+#     logging.info(f"Successfully imported setup module {setup_module} from PACKAGE {package_name}. Now time to run its main()....")
 
-    try:
-        r = setup_module.main()
-    except Exception as e:
-        logging.info(f"Failure to run {setup_module}.main():\n{e}")
-        r = f"Failure:\n{e}"
+#     try:
+#         r = setup_module.main()
+#     except Exception as e:
+#         logging.info(f"Failure to run {setup_module}.main():\n{e}")
+#         r = f"Failure:\n{e}"
 
-    report.message = str(r)
+#     report.message = str(r)
 
-    return report
+#     return report
 
 
 def run():
@@ -370,67 +373,18 @@ def run():
 
     for this_import in imports:
 
-        package_name, setup_file_name, path, report = initialize_import(this_import)
+        module_name, module_path, report = initialize_import(this_import)
 
         # clear_modules_from_sys(package_name, path) # this seems to mess up the module imports
 
-        if package_name in ["new_albums"]:
-            # run_poetry_package(package_name, setup_file_name, path, report)
+        try:
+            report = run_module(report, module_path)
+        except Exception as e:
+            additional_message = ""
+            r = f"Failure to import {module_name}. <{e}> + {additional_message}"
+            logging.info(r)
+            report.message = str(r)
 
-            # setup_module = importlib.import_module("new_albums")
-            # run_main(setup_module)
-
-            # setup_module = importlib.import_module("new_albums", package="new_albums")
-            # run_main(setup_module)
-
-            # setup_module = importlib.import_module("new_albums.new_albums", package="new_albums.new_albums")  
-            # run_main(setup_module)
-
-            r = runpy.run_module("new_albums", run_name="__main__")
-            print(r)
-
-                            
-
-        # elif package_name in ["kyoko"]:
-
-        #     os.system(f"py kyoko\setup.py") # WORKS
-
-        #     # run_package_but_not_poetry(package_name, setup_file_name, report) # module 'kyoko' has no attribute 'main'
-        #     # run_modern_way(this_import)
-
-        # elif package_name in ["demos"]:
-        #     # run_package_but_not_poetry(package_name, setup_file_name, report) # module 'demos' has no attribute 'main'
-        #     os.system(f"py demos\demos\__main__.py") # WORKS
-        #     # exit()
-
-        # elif package_name in ["spotnik"]:
-
-        #     report = run_poetry_package(package_name, setup_file_name, path, report) 
-
-        # elif setup_file_name is None:
-        #     """
-        #     This works well for modules in the current directory such as: pool, songpopularity
-        #     """
-        #     logging.info("importing an apps.module rather than an apps.package.")
-        #     module_name = package_name
-
-        #     try:
-        #         report = run_apps_module(report, module_name)
-        #     except Exception as e:
-        #         additional_message = ""
-        #         r = f"Failure to import {module_name}. <{e}> + {additional_message}"
-        #         report.message = str(r)
-
-        # else:
-        #     logging.info("importing an apps.package.")
-        #     try:
-        #         report = run_poetry_package(package_name, setup_file_name, path, report)
-
-        #     except Exception as e:
-        #         e = traceback.format_exc()        
-        #         logging.error(f"Failure to import {package_name}:\n{e}")
-        #         r = f"Failure to import {package_name}. <{e}>"
-        #         report.message = str(r)
 
         result.append(report)
 
@@ -440,82 +394,204 @@ def run():
     return result
 
 
-def run_main(setup_module):
-    """ inspect and run the main() function of a module"""
-    print(setup_module)
-    print(dir(setup_module))
-    try:
-        setup_module.main()
-    except Exception as e:
-        print(e)
+# def run_main(setup_module):
+#     """ inspect and run the main() function of a module"""
+#     print(setup_module)
+#     print(dir(setup_module))
+#     try:
+#         setup_module.main()
+#     except Exception as e:
+#         print(e)
 
-    for importer, modname, ispkg in pkgutil.iter_modules(setup_module.__path__):
-        print(f"Found submodule {modname} (is a package: {ispkg})")
+#     for importer, modname, ispkg in pkgutil.iter_modules(setup_module.__path__):
+#         print(f"Found submodule {modname} (is a package: {ispkg})")
 
 
 def main():
 
-    """ THESE WORK (but you must run `pip install .` or `poetry install` in each package directory first) """
-
-    # """ Test poetry package new_albums: passes """
-    # try:
-    #     print("\nnew_albums:")
-    #     importlib.import_module("new_albums.__main__").main()
-    # except Exception as e:
-    #     e = traceback.format_exc() 
-    #     print(e)
-
-    # """ Test module: passes """
-    # try:
-    #     print("\nPool:")
-    #     importlib.import_module("pool").main()
-    # except Exception as e:
-    #     e = traceback.format_exc() 
-    #     print(e)
-
-    # """ Test poetry package: ... """
-    # try:
-    #     print("\nsocial:")
-    #     importlib.import_module("social.__main__").main()
-    # except Exception as e:
-    #     e = traceback.format_exc() 
-    #     print(e)
-
-    # """ Test poetry package spotnik: passes """
-    # try:
-    #     print("\nspotnik:")
-    #     importlib.import_module("spotnik.__main__").main()
-    # except Exception as e:
-    #     e = traceback.format_exc() 
-    #     print(e)
-
-
     """ THESE DON'T WORK YET """
+    # try:
+    #     print("\n demos :")
+    #     importlib.import_module("demos.__main__").main()
+    # except Exception as e:
+    #     e = traceback.format_exc() 
+    #     print(e)
 
-    """ Test poetry package spotnik: passes """
-    try:
-        print("\n lastfmcrawler :")
-        importlib.import_module("crawlers.lastfmcrawler.__main__").main()
-    except Exception as e:
-        e = traceback.format_exc() 
-        print(e)
+    # try:
+    #     print("\n kyoko :")
+    #     importlib.import_module("kyoko.__main__").main()
+    # except Exception as e:
+    #     e = traceback.format_exc() 
+    #     print(e)
 
     
 
-    
-
-    
 
 
-    # print(f"Running maintenance.py with args {args}")
-    # result = run()
+    print(f"Running maintenance.py with args {args}")
+    result = run()
 
-    # print_to_sheet = False
+    print_to_sheet = True
 
-    # if print_to_sheet:
+    if print_to_sheet:
 
-    #     print_result_to_sheet(result)
+        print_result_to_sheet(result)
 
 
 if __name__ == "__main__":
     main()
+
+
+
+
+""" THESE WORK (but you must run `pip install -e .` in each package directory first. Hopefully only once?) """
+
+# """ Test poetry package new_albums: passes """
+# try:
+#     print("\nnew_albums:")
+#     result = importlib.import_module("new_albums.__main__").main()
+#     # print(r)
+# except Exception as e:
+#     e = traceback.format_exc() 
+#     print(e)
+
+# """ Test module: passes """
+# try:
+#     print("\nPool:")
+#     importlib.import_module("pool").main()
+#     # print(r)
+# except Exception as e:
+#     e = traceback.format_exc() 
+#     print(e)
+
+# """ Test poetry package: ... """
+# try:
+#     print("\nsocial:")
+#     importlib.import_module("social.__main__").main()
+# except Exception as e:
+#     e = traceback.format_exc() 
+    # print(e)
+
+# """ Test poetry package spotnik: passes """
+# try:
+#     print("\nspotnik:")
+#     importlib.import_module("spotnik.__main__").main()
+# except Exception as e:
+#     e = traceback.format_exc() 
+#     print(e)
+
+# """ Test poetry package spotnik: passes """
+# try:
+#     print("\n lastfmcrawler :")
+#     importlib.import_module("crawlers.lastfmcrawler.__main__").main()
+# except Exception as e:
+#     e = traceback.format_exc() 
+#     print(e)
+
+# """ Test poetry package spotifycrawler:  """
+# try:
+#     print("\n spotifycrawler :")
+#     importlib.import_module("crawlers.spotifycrawler.__main__").main()
+# except Exception as e:
+#     e = traceback.format_exc() 
+#     print(e)
+
+# try:
+#     print("\n wme :")
+#     importlib.import_module("crawlers.wme.__main__").main()
+# except Exception as e:
+#     e = traceback.format_exc() 
+#     print(e)
+
+# try:
+#     print("\n ankimove :")
+#     importlib.import_module("ankimove").main()
+# except Exception as e:
+#     e = traceback.format_exc() 
+#     print(e)
+
+# try:
+#     print("\n setlistfm :")
+#     importlib.import_module("setlistfm").main()
+# except Exception as e:
+#     e = traceback.format_exc() 
+#     print(e)
+
+# try:
+#     print("\n songpopularity :")
+#     importlib.import_module("songpopularity").main()
+# except Exception as e:
+#     e = traceback.format_exc() 
+#     print(e)
+
+# try:
+#     print("\n songdata :")
+#     importlib.import_module("songdata").main()
+# except Exception as e:
+#     e = traceback.format_exc() 
+#     print(e)
+
+    
+
+
+
+
+""" This was for dev and testing with collaborators on github. """
+
+# if package_name in ["new_albums"]:
+#     # run_poetry_package(package_name, setup_file_name, path, report)
+
+#     # setup_module = importlib.import_module("new_albums")
+#     # run_main(setup_module)
+
+#     # setup_module = importlib.import_module("new_albums", package="new_albums")
+#     # run_main(setup_module)
+
+#     # setup_module = importlib.import_module("new_albums.new_albums", package="new_albums.new_albums")  
+#     # run_main(setup_module)
+
+#     # r = runpy.run_module("new_albums", run_name="__main__")
+#     # print(r)
+
+                    
+
+# elif package_name in ["kyoko"]:
+
+#     os.system(f"py kyoko\setup.py") # WORKS
+
+#     # run_package_but_not_poetry(package_name, setup_file_name, report) # module 'kyoko' has no attribute 'main'
+#     # run_modern_way(this_import)
+
+# elif package_name in ["demos"]:
+#     # run_package_but_not_poetry(package_name, setup_file_name, report) # module 'demos' has no attribute 'main'
+#     os.system(f"py demos\demos\__main__.py") # WORKS
+#     # exit()
+
+# elif package_name in ["spotnik"]:
+
+#     report = run_poetry_package(package_name, setup_file_name, path, report) 
+
+# elif setup_file_name is None:
+#     """
+#     This works well for modules in the current directory such as: pool, songpopularity
+#     """
+#     logging.info("importing an apps.module rather than an apps.package.")
+#     module_name = package_name
+
+#     try:
+#         report = run_module(report, module_name)
+#     except Exception as e:
+#         additional_message = ""
+#         r = f"Failure to import {module_name}. <{e}> + {additional_message}"
+#         report.message = str(r)
+
+# else:
+#     logging.info("importing an apps.package.")
+#     try:
+#         report = run_poetry_package(package_name, setup_file_name, path, report)
+
+#     except Exception as e:
+#         e = traceback.format_exc()        
+#         logging.error(f"Failure to import {package_name}:\n{e}")
+#         r = f"Failure to import {package_name}. <{e}>"
+#         report.message = str(r)

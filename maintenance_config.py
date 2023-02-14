@@ -30,6 +30,7 @@ class Report:
     ):
         self.last_run_date = last_run_date
         self.module_name = module_name
+        
         self.description = description
         self.message = message
         self.platform = platform
@@ -44,30 +45,25 @@ class RunType(enum.Enum):
 class Import:
     def __init__(
         self,
-        module_name: str,
+        module_name: str,        
         description: str,
         frequency: enum,
+        module_path: str=None,
         skipper=False,
-        setup_file_name: str = None,
         date=today,
-        path: str = base_path,
         platform=COMPUTERNAME,
         failure_message="",
-        bat_file: str= None,
     ):
         self.module_name = module_name
+        self.module_path = module_path or module_name
         self.description = description
         self.frequency = frequency
         self.skipper = skipper
-        self.setup_file_name = setup_file_name
         self.date = date
-        self.path = path
         self.platform = platform
         self.failure_message = failure_message
-        self.bat_file = bat_file
-
     def __repr__(self):
-        return f"<Import module_name:{self.module_name} setup_file_name:{self.setup_file_name} path:{self.path}>"
+        return f"<Import module_name={self.module_name} || module_path={self.module_path} >"
 
 
 skip_report = {
@@ -84,37 +80,65 @@ chromedriver_warning = """\\nnThis will fail when the chrome version has passed 
             If theyve updated their terms&conditions and you need to check the box, this program will also fail."""
 
 all_imports = [
+
     Import(
-        module_name="setlistfm",
-        description="updates the history tab on in the SETLIST workbook. How many times we've played each song in each market. Fetches data from the setlistfm.com API.",
-        frequency=RunType.weekly,
+        module_name="ankimove",
+        description="move lyric cards in and out of LYRICS. DOES NOT CREATE CARDS which is done by catalog.py\n\nTo simply create new cards that already have rows in ANKI CARDS FOR LYRICS spreadsheet: uncomment the main() function in catalog/anki_functions.",
+        frequency=RunType.short,
         # skipper=True,
-        # failure_message=chromedriver_warning,
+        failure_message="\nFREQUENT FAILURE: If there is a new version of anki asking to be downloaded, ankimove.py will fail.\nIf I can't find cards, remember the cards must be created in catalog.py first.",
     ),
     Import(
-        module_name="songpopularity",
-        description="""update Spotify stats on the popularity tab in the SETLIST workbook. updates the data for existing rows in SETLIST/popularity tab"
-            This is a sheet which tracks the change in popularity over time
-            of songs you've chosen to track by adding to this sheet.
-            Songs are not added automatically.""",
-        frequency=RunType.weekly,
+        module_name="catalog",
+        description="Not normally run in maintenance.\nMany functions, including creating rehearsal chart like this https://docs.google.com/spreadsheets/d/1S2dg39D1UAXNfjjR3XogZ8hZ3srXTNuuivHISaFC5dA/edit#gid=268888478",
+        frequency=RunType.short,
+        skipper=True,
+        # path=rf"{base_path}\catalog",
+        # setup_file_name="setup",
     ),
     Import(
-        module_name="spotifycrawler",
-        description="updates the spotify data on the spotify tab in the SETLIST workbook. crawler. scraper. AND Weezer Data spreadsheet, all tab.",
-        frequency=RunType.weekly,
-        failure_message=chromedriver_warning,
-        setup_file_name="__main__",
+        module_name="demos",
+        module_path="demos.__main__",
+        description="Performs demo maintenance on dbox/demos and dbox/music-me/bundles. See also these 2 bat scripts that have their own tasks in task scheduler: \nPrivate Update (for uploading the SZNZ data to firestore for your Private app)\nWeezify Update (for uploading the bundles data to Firestore for Weezify) ",
+        frequency=RunType.short,
+        # path=rf"{base_path}\demos",
+        # setup_file_name="__main__",
+        failure_message="if ffmpeg is not installed on the computer, this will crash maintenance",
+        skipper=False,  # This SHOULD be run in maintenance, not its own script??
+        # bat_file="DEMOS.bat",
     ),
+    Import(
+        module_name="kyoko",
+        module_path="kyoko.__main__",
+        description="Sends an email to Kyoko if there is a stress level > 0 or a flight duration",
+        frequency=RunType.short,
+        # skipper=True,
+    ),
+    Import(
+        module_name="lyrictransfer",
+        description="copy selected lines from LINE MUNCHER and lyrics/PERSONAL into THE LYRICS SHEET",
+        frequency=RunType.short,
+        skipper=True,
+    ),
+    
+    
     Import(
         module_name="lastfmcrawler",
+        module_path="crawlers.lastfmcrawler.__main__",
         description="updates the lastfm data on the all tab in the WEEZER DATA workbook. crawler. scraper.",
-        frequency=RunType.weekly,
+        frequency=RunType.short,
         # skipper=True,
         failure_message=chromedriver_warning,
-        path=rf"{base_path}\crawlers\lastfmcrawler",
-        setup_file_name="__main__",
     ),
+    Import(
+        module_name="new_albums",
+        module_path="new_albums.__main__",
+        description="Makes a spotify playlist of any albums released this week (filtered by your criteria). if your spotify cred needs to be authorized, the whole program will stop here. It may be the case if chrome is logged into a different spotify, the program will pause here.",
+        frequency=RunType.short,
+        # setup_file_name="new_albums.__main__",
+        # path=rf"{base_path}\new_albums",
+    ),
+    
     Import(
         module_name="songdata",
         description="Update the data in the ENCYCLOPEDIA and the SETLIST workbooks.",
@@ -126,30 +150,51 @@ all_imports = [
         description="Analyzes stresses and word_freq for LYRICS and TITLES",
         frequency=RunType.long,
         skipper=True,
-        path=rf"{base_path}\Stresses",
     ),
     Import(
         module_name="rhymes",
         description="determines rhymes for LYRICS and TITLES",
         frequency=RunType.long,
         skipper=True,
-        path=rf"{base_path}\Rhymes",
+    ),
+    Import(
+        module_name="setlistfm",
+        description="updates the history tab on in the SETLIST workbook. How many times we've played each song in each market. Fetches data from the setlistfm.com API.",
+        frequency=RunType.weekly,
+        # skipper=True,
+    ),
+    
+    Import(
+        module_name="songpopularity",
+        description="""update Spotify stats on the popularity tab in the SETLIST workbook. updates the data for existing rows in SETLIST/popularity tab"
+            This is a sheet which tracks the change in popularity over time
+            of songs you've chosen to track by adding to this sheet.
+            Songs are not added automatically.""",
+        frequency=RunType.weekly,
+    ),
+    Import(
+        module_name="spotifycrawler",
+        module_path="crawlers.spotifycrawler.__main__",
+        description="updates the spotify data on the spotify tab in the SETLIST workbook. crawler. scraper. AND Weezer Data spreadsheet, all tab.",
+        frequency=RunType.weekly,
+        failure_message=chromedriver_warning,
     ),
     Import(
         module_name="sentiment11",
         description="anyalyzes sentiment for LYRICS and TITLES",
         frequency=RunType.long,
         skipper=True,
-        path=rf"{base_path}\Sentiment",
     ),
     Import(
         module_name="wme",
+        module_path="crawlers.wme.__main__",
         description="""scrape show info from wme webservice and paste it into the calendar. 
         and download the deal sheet pdfs.""",
         frequency=RunType.short,
         # skipper=True,
         failure_message=chromedriver_warning,
     ),
+    
     Import(
         module_name="wmepdf",
         description="scrape the downloaded deal sheets and print the data to the Weezer calendar",
@@ -179,53 +224,8 @@ all_imports = [
         frequency=RunType.long,
         skipper=True,
     ),
-    Import(
-        module_name="ankimove",
-        description="move lyric cards in and out of LYRICS. DOES NOT CREATE CARDS which is done by catalog.py\n\nTo simply create new cards that already have rows in ANKI CARDS FOR LYRICS spreadsheet: uncomment the main() function in catalog/anki_functions.",
-        frequency=RunType.short,
-        path=base_path,
-        # skipper=True,
-        failure_message="\nFREQUENT FAILURE: If there is a new version of anki asking to be downloaded, ankimove.py will fail.\nIf I can't find cards, remember the cards must be created in catalog.py first.",
-    ),
-    Import(
-        module_name="catalog",
-        description="Not normally run in maintenance.\nMany functions, including creating rehearsal chart like this https://docs.google.com/spreadsheets/d/1S2dg39D1UAXNfjjR3XogZ8hZ3srXTNuuivHISaFC5dA/edit#gid=268888478",
-        frequency=RunType.short,
-        skipper=True,
-        path=rf"{base_path}\catalog",
-        setup_file_name="setup",
-    ),
-    Import(
-        module_name="demos",
-        description="Performs demo maintenance on dbox/demos and dbox/music-me/bundles. See also these 2 bat scripts that have their own tasks in task scheduler: \nPrivate Update (for uploading the SZNZ data to firestore for your Private app)\nWeezify Update (for uploading the bundles data to Firestore for Weezify) ",
-        frequency=RunType.short,
-        path=rf"{base_path}\demos",
-        setup_file_name="__main__",
-        failure_message="if ffmpeg is not installed on the computer, this will crash maintenance",
-        skipper=False,  # This SHOULD be run in maintenance, not its own script??
-        # bat_file="DEMOS.bat",
-    ),
-    Import(
-        module_name="kyoko",
-        description="Sends an email to Kyoko if there is a stress level > 0 or a flight duration",
-        frequency=RunType.short,
-        # skipper=True,
-        setup_file_name="setup",
-        path=rf"{base_path}\kyoko",
-    ),
-    Import(
-        module_name="lyrictransfer",
-        description="copy selected lines from LINE MUNCHER and lyrics/PERSONAL into THE LYRICS SHEET",
-        frequency=RunType.short,
-        skipper=True,
-    ),
-    Import(
-        module_name="new_albums",
-        description="Makes a spotify playlist of any albums released this week (filtered by your criteria). if your spotify cred needs to be authorized, the whole program will stop here. It may be the case if chrome is logged into a different spotify, the program will pause here.",
-        frequency=RunType.short,
-        setup_file_name="new_albums.__main__",
-        path=rf"{base_path}\new_albums",
-    ),
+    
+    
     # Import(
     #     module_name="newmusic",
     #     description="Makes a spotify playlist for you based on your rules. if your spotify cred needs to be authorized, the whole program will stop here. It may be the case if chrome is logged into a different spotify, the program will pause here.",
@@ -235,9 +235,10 @@ all_imports = [
     # ),
     Import(
         module_name="spotnik",
+        module_path="spotnik.__main__",
         description="Makes a spotify playlist for you based on your rules. if your spotify cred needs to be authorized, the whole program will stop here. It may be the case if chrome is logged into a different spotify, the program will pause here.",
         frequency=RunType.short,
-        setup_file_name="spotnik.__main__",
+        # setup_file_name="spotnik.__main__",
         # path=rf"{base_path}\spotnik",
     ),
     Import(
