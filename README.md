@@ -1,6 +1,12 @@
 # apps
 My monorepo of python scripts, modules, and packages. I'm currently publishing this only to get help with some issues. Almost all of the files are gitignored.
 
+## Note to Self:
+To install the submodules in a way that you'll always have the latest commit, try this in each submodule directory instead of `pip install .` or `poetry install` :
+"If you do what's called an editable install you won't have to re-install your own code that you're actively editing. People typically do that with `pip install -e .` You can then point pip at the directory holding the code, e.g. . is common for the current directory."
+
+`pip install -e .`
+
 ## Current Issue: How to run the packages from another script
 
 I have a python script `apps\maintenance.py` that imports a number of my packages and runs them. As I've converted some of these packages to poetry, I can't figure out how to get them to run. They're importing just fine but then I get this error when I call main() on the import.
@@ -10,3 +16,9 @@ maintenance.py is a master script that imports and runs many other Scripts, some
 Next up I'd like to tackle "crawlers", which right now is a directory within apps which has three packages in it, spotifycrawler, LastFMcrawler and a package of common code called core. I'd like maintenance.py to be able to import and run spotifycrawler and LastFMcrawler.
 
 Please let me know if this doesn't seem like a reasonable way to import and run a large number of packages on a regular schedule.
+
+here is the report it prints after running each day.
+
+
+![image](https://user-images.githubusercontent.com/24362267/218493412-d48bccbd-54e4-462a-987d-bd23849c1b3e.png)
+
