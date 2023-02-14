@@ -1,6 +1,12 @@
 # apps
 My monorepo of python scripts, modules, and packages. I'm currently publishing this only to get help with some issues. Almost all of the files are gitignored.
 
+## Note to Self:
+To install the submodules in a way that you'll always have the latest commit, try this in each submodule directory instead of `pip install .` or `poetry install` :
+"If you do what's called an editable install you won't have to re-install your own code that you're actively editing. People typically do that with `pip install -e .` You can then point pip at the directory holding the code, e.g. . is common for the current directory."
+
+`pip install -e .`
+
 ## Current Issue: How to run the packages from another script
 
 I have a python script `apps\maintenance.py` that imports a number of my packages and runs them. As I've converted some of these packages to poetry, I can't figure out how to get them to run. They're importing just fine but then I get this error when I call main() on the import.
