@@ -44,7 +44,13 @@ args = maintenance_parser.parse_args()
 
     Module: Python file meant to be imported.
 
-    Package: directory containing modules/packages.
+    Package: directory containing modules/packages. To run packages, these points may be helpful:
+    
+    - don't have an __init__.py file in the top level of the package
+    - put `from .__main__ import main` in the __init__.py file of the inner package
+    - run `pip install -e .` in the top level of the package
+    - your main function should be in a file called __main__.py in the inner package
+    - all other modules should be in a lower level than the __main__.py file
 
 """
 
@@ -294,73 +300,6 @@ def run_module(report, module_path):
     return report
 
 
-# def run_bat_file():
-    
-#     # BAT FILE WORKS FOR DEMOS BUT NO RETURN VALUE
-#     bat_dir = "C:\RC Dropbox\Rivers Cuomo\Apps\Z-BAT"
-#     bat_dir = "C:\RC Dropbox\Rivers Cuomo\Apps\demos"
-
-
-# def run_crawler_package(package_name, setup_file_name, report):
-#     logging.info(f"package_name.setup_file_name={package_name}.{setup_file_name}")
-#     setup_module = importlib.import_module(
-#         f"crawlers.{package_name}",
-#         # package=f"{crawlers}",
-#     )
-#     try:
-#         r = setup_module.main()
-#     except Exception as e:
-#         logging.info(f"Failure to run {setup_module}.main():\n{e}")
-#         r = f"Failure:\n{e}"
-#     report.message = str(r)    
-#     return report
-
-
-# def run_modern_way(this_import):
-#     MODULE_PATH = this_import.path + "\\__init__.py"
-#     MODULE_NAME = this_import.module_name
-#     spec = importlib.util.spec_from_file_location(MODULE_NAME, MODULE_PATH)
-#     module = importlib.util.module_from_spec(spec)
-#     sys.modules[spec.name] = module 
-#     spec.loader.exec_module(module)
-#     module.main()
-
-
-# def run_package_but_not_poetry(package_name, setup_file_name, report):
-#     logging.info(f"package_name.setup_file_name={package_name}.{setup_file_name}")
-#     setup_module = importlib.import_module(
-#         f"{package_name}",
-#         package=f"{package_name}",
-#     )
-#     try:
-#         r = setup_module.main()
-#     except Exception as e:
-#         logging.info(f"Failure to run {setup_module}.main():\n{e}")
-#         r = f"Failure:\n{e}"
-#     report.message = str(r)    
-#     return report
-
-
-# def run_poetry_package(package_name, setup_file_name, path, report):
-#     """ Import and run a package that uses Poetry."""
-
-#     logging.info("run_poetry_package")
-#     logging.info(f"package_name={package_name}")
-#     logging.info(f"setup_file_name={setup_file_name}")
-#     setup_module = importlib.import_module(f"{package_name}.{setup_file_name}")
-#     logging.info(f"Successfully imported setup module {setup_module} from PACKAGE {package_name}. Now time to run its main()....")
-
-#     try:
-#         r = setup_module.main()
-#     except Exception as e:
-#         logging.info(f"Failure to run {setup_module}.main():\n{e}")
-#         r = f"Failure:\n{e}"
-
-#     report.message = str(r)
-
-#     return report
-
-
 def run():
 
     logging.info("==========================================================")
@@ -394,28 +333,9 @@ def run():
     return result
 
 
-# def run_main(setup_module):
-#     """ inspect and run the main() function of a module"""
-#     print(setup_module)
-#     print(dir(setup_module))
-#     try:
-#         setup_module.main()
-#     except Exception as e:
-#         print(e)
-
-#     for importer, modname, ispkg in pkgutil.iter_modules(setup_module.__path__):
-#         print(f"Found submodule {modname} (is a package: {ispkg})")
-
-
 def main():
 
     """ THESE DON'T WORK YET """
-    # try:
-    #     print("\n demos :")
-    #     importlib.import_module("demos.__main__").main()
-    # except Exception as e:
-    #     e = traceback.format_exc() 
-    #     print(e)
 
     # try:
     #     print("\n kyoko :")
@@ -447,6 +367,16 @@ if __name__ == "__main__":
 """ THESE WORK (but you must run `pip install -e .` in each package directory first. Hopefully only once?) """
 
 # """ Test poetry package new_albums: passes """
+
+    # try:
+    #     print("\n demos :")
+    #     importlib.import_module("demos.__main__").main()
+    # except Exception as e:
+    #     e = traceback.format_exc() 
+    #     print(e)
+
+    # exit()
+
 # try:
 #     print("\nnew_albums:")
 #     result = importlib.import_module("new_albums.__main__").main()
@@ -595,3 +525,85 @@ if __name__ == "__main__":
 #         logging.error(f"Failure to import {package_name}:\n{e}")
 #         r = f"Failure to import {package_name}. <{e}>"
 #         report.message = str(r)
+
+
+
+# def run_bat_file():
+    
+#     # BAT FILE WORKS FOR DEMOS BUT NO RETURN VALUE
+#     bat_dir = "C:\RC Dropbox\Rivers Cuomo\Apps\Z-BAT"
+#     bat_dir = "C:\RC Dropbox\Rivers Cuomo\Apps\demos"
+
+
+# def run_crawler_package(package_name, setup_file_name, report):
+#     logging.info(f"package_name.setup_file_name={package_name}.{setup_file_name}")
+#     setup_module = importlib.import_module(
+#         f"crawlers.{package_name}",
+#         # package=f"{crawlers}",
+#     )
+#     try:
+#         r = setup_module.main()
+#     except Exception as e:
+#         logging.info(f"Failure to run {setup_module}.main():\n{e}")
+#         r = f"Failure:\n{e}"
+#     report.message = str(r)    
+#     return report
+
+
+# def run_modern_way(this_import):
+#     MODULE_PATH = this_import.path + "\\__init__.py"
+#     MODULE_NAME = this_import.module_name
+#     spec = importlib.util.spec_from_file_location(MODULE_NAME, MODULE_PATH)
+#     module = importlib.util.module_from_spec(spec)
+#     sys.modules[spec.name] = module 
+#     spec.loader.exec_module(module)
+#     module.main()
+
+
+# def run_package_but_not_poetry(package_name, setup_file_name, report):
+#     logging.info(f"package_name.setup_file_name={package_name}.{setup_file_name}")
+#     setup_module = importlib.import_module(
+#         f"{package_name}",
+#         package=f"{package_name}",
+#     )
+#     try:
+#         r = setup_module.main()
+#     except Exception as e:
+#         logging.info(f"Failure to run {setup_module}.main():\n{e}")
+#         r = f"Failure:\n{e}"
+#     report.message = str(r)    
+#     return report
+
+
+# def run_poetry_package(package_name, setup_file_name, path, report):
+#     """ Import and run a package that uses Poetry."""
+
+#     logging.info("run_poetry_package")
+#     logging.info(f"package_name={package_name}")
+#     logging.info(f"setup_file_name={setup_file_name}")
+#     setup_module = importlib.import_module(f"{package_name}.{setup_file_name}")
+#     logging.info(f"Successfully imported setup module {setup_module} from PACKAGE {package_name}. Now time to run its main()....")
+
+#     try:
+#         r = setup_module.main()
+#     except Exception as e:
+#         logging.info(f"Failure to run {setup_module}.main():\n{e}")
+#         r = f"Failure:\n{e}"
+
+#     report.message = str(r)
+
+#     return report
+
+
+
+# def run_main(setup_module):
+#     """ inspect and run the main() function of a module"""
+#     print(setup_module)
+#     print(dir(setup_module))
+#     try:
+#         setup_module.main()
+#     except Exception as e:
+#         print(e)
+
+#     for importer, modname, ispkg in pkgutil.iter_modules(setup_module.__path__):
+#         print(f"Found submodule {modname} (is a package: {ispkg})")

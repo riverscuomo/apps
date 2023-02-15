@@ -24,3 +24,93 @@ INFO: 02/14/2023 08:56:47 Success!
 INFO: 02/14/2023 08:56:47  
 INFO: 02/14/2023 08:56:47 this_import=<Import module_name=new_albums || module_path=new_albums.__main__ >
 INFO: 02/14/2023 08:56:47 Successfully imported new_albums.__main__. Now time to run its main()....
+INFO: 02/15/2023 12:01:21 ==========================================================
+INFO: 02/15/2023 12:01:21 MAINTENANCE.PY
+INFO: 02/15/2023 12:01:21 [<Import module_name=ankimove || module_path=ankimove >, <Import module_name=demos || module_path=demos.__main__ >, <Import module_name=kyoko || module_path=kyoko.__main__ >, <Import module_name=lastfmcrawler || module_path=crawlers.lastfmcrawler.__main__ >, <Import module_name=new_albums || module_path=new_albums.__main__ >, <Import module_name=wme || module_path=crawlers.wme.__main__ >, <Import module_name=spotnik || module_path=spotnik.__main__ >, <Import module_name=pool || module_path=pool >]
+INFO: 02/15/2023 12:01:21  
+INFO: 02/15/2023 12:01:21 this_import=<Import module_name=ankimove || module_path=ankimove >
+INFO: 02/15/2023 12:01:21 Successfully imported ankimove. Now time to run its main()....
+INFO: 02/15/2023 12:02:05 Success: Africa
+Failure: findCards couldn't find cards for Burndtjamb.
+Failure: findCards couldn't find cards for Ijustthrewoutthelove.
+Success: Lagirlz
+Success: Theworldhasturned
+Success: Whybother
+changeDeck errors: None
+removeCards: None
+
+INFO: 02/15/2023 12:02:05  
+INFO: 02/15/2023 12:02:05 this_import=<Import module_name=demos || module_path=demos.__main__ >
+INFO: 02/15/2023 12:02:05 Failure to import demos. <No module named 'demos.__main__'> + 
+INFO: 02/15/2023 12:02:05  
+INFO: 02/15/2023 12:02:05 this_import=<Import module_name=kyoko || module_path=kyoko.__main__ >
+INFO: 02/15/2023 12:02:05 Failure to import kyoko. <No module named 'kyoko.__main__'> + 
+INFO: 02/15/2023 12:02:05  
+INFO: 02/15/2023 12:02:05 this_import=<Import module_name=lastfmcrawler || module_path=crawlers.lastfmcrawler.__main__ >
+INFO: 02/15/2023 12:02:05 Successfully imported crawlers.lastfmcrawler.__main__. Now time to run its main()....
+INFO: 02/15/2023 12:02:24 Success!
+INFO: 02/15/2023 12:02:24  
+INFO: 02/15/2023 12:02:24 this_import=<Import module_name=new_albums || module_path=new_albums.__main__ >
+INFO: 02/15/2023 12:02:24 Successfully imported new_albums.__main__. Now time to run its main()....
+INFO: 02/15/2023 06:37:45 Request to users/get_current_account
+INFO: 02/15/2023 06:38:13 Request to users/get_current_account
+INFO: 02/15/2023 06:38:15 file_cache is only supported with oauth2client<4.0.0
+INFO: 02/15/2023 06:38:15 file_cache is only supported with oauth2client<4.0.0
+INFO: 02/15/2023 06:38:15 Refreshing due to a 401 (attempt 1/2)
+INFO: 02/15/2023 06:38:15 Refreshing access_token
+INFO: 02/15/2023 06:39:31 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:32 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:34 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:36 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:36 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:37 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:39 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:41 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:43 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:44 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:46 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:48 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:49 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:51 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:52 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:53 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:55 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:56 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:39:58 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:44:33 ==========================================================
+INFO: 02/15/2023 06:44:33 MAINTENANCE.PY
+INFO: 02/15/2023 06:44:33 [<Import module_name=demos || module_path=demos.__main__ >]
+INFO: 02/15/2023 06:44:33  
+INFO: 02/15/2023 06:44:33 this_import=<Import module_name=demos || module_path=demos.__main__ >
+INFO: 02/15/2023 06:49:57 ==========================================================
+INFO: 02/15/2023 06:49:57 MAINTENANCE.PY
+INFO: 02/15/2023 06:49:57 [<Import module_name=demos || module_path=demos.__main__ >]
+INFO: 02/15/2023 06:49:57  
+INFO: 02/15/2023 06:49:57 this_import=<Import module_name=demos || module_path=demos.__main__ >
+INFO: 02/15/2023 06:49:57 Request to users/get_current_account
+INFO: 02/15/2023 06:49:59 file_cache is only supported with oauth2client<4.0.0
+INFO: 02/15/2023 06:49:59 Successfully imported demos.__main__. Now time to run its main()....
+INFO: 02/15/2023 06:49:59 file_cache is only supported with oauth2client<4.0.0
+INFO: 02/15/2023 06:50:05 ==========================================================
+INFO: 02/15/2023 06:50:05 MAINTENANCE.PY
+INFO: 02/15/2023 06:50:05 [<Import module_name=demos || module_path=demos.__main__ >]
+INFO: 02/15/2023 06:50:05  
+INFO: 02/15/2023 06:50:05 this_import=<Import module_name=demos || module_path=demos.__main__ >
+INFO: 02/15/2023 06:50:06 Request to users/get_current_account
+INFO: 02/15/2023 06:50:07 file_cache is only supported with oauth2client<4.0.0
+INFO: 02/15/2023 06:50:07 Successfully imported demos.__main__. Now time to run its main()....
+INFO: 02/15/2023 06:50:07 file_cache is only supported with oauth2client<4.0.0
+INFO: 02/15/2023 06:50:33 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:50:35 Request to sharing/create_shared_link_with_settings
+INFO: 02/15/2023 06:51:47 
+Success! Finished processing the files in C:\RC Dropbox\Rivers Cuomo\Demos\\. No files were converted to mp3 because no new non-mp3 files were added to 
+
+Success! Finished processing the files in C:\RC Dropbox\Rivers Cuomo\Music--Me\Rivers Cuomo\BUNDLES. No files were converted to mp3 because no new non-mp3 files were added to 
+Warnings: 
+ - can't make an eyed3 demo object of C:\RC Dropbox\Rivers Cuomo\Demos\\hold\AUDIO_1713.mp3
+INFO: 02/15/2023 06:51:47 
+Success! Finished processing the files in C:\RC Dropbox\Rivers Cuomo\Demos\\. No files were converted to mp3 because no new non-mp3 files were added to 
+
+Success! Finished processing the files in C:\RC Dropbox\Rivers Cuomo\Music--Me\Rivers Cuomo\BUNDLES. No files were converted to mp3 because no new non-mp3 files were added to 
+Warnings: 
+ - can't make an eyed3 demo object of C:\RC Dropbox\Rivers Cuomo\Demos\\hold\AUDIO_1713.mp3
