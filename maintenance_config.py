@@ -93,19 +93,15 @@ all_imports = [
         description="Not normally run in maintenance.\nMany functions, including creating rehearsal chart like this https://docs.google.com/spreadsheets/d/1S2dg39D1UAXNfjjR3XogZ8hZ3srXTNuuivHISaFC5dA/edit#gid=268888478",
         frequency=RunType.short,
         skipper=True,
-        # path=rf"{base_path}\catalog",
-        # setup_file_name="setup",
     ),
     Import(
         module_name="demos",
         module_path="demos.__main__",
         description="Performs demo maintenance on dbox/demos and dbox/music-me/bundles. See also these 2 bat scripts that have their own tasks in task scheduler: \nPrivate Update (for uploading the SZNZ data to firestore for your Private app)\nWeezify Update (for uploading the bundles data to Firestore for Weezify) ",
         frequency=RunType.short,
-        # path=rf"{base_path}\demos",
-        # setup_file_name="__main__",
         failure_message="if ffmpeg is not installed on the computer, this will crash maintenance",
         skipper=False,  # This SHOULD be run in maintenance, not its own script??
-        # bat_file="DEMOS.bat",
+
     ),
     Import(
         module_name="kyoko",
@@ -120,8 +116,6 @@ all_imports = [
         frequency=RunType.short,
         skipper=True,
     ),
-    
-    
     Import(
         module_name="lastfmcrawler",
         module_path="crawlers.lastfmcrawler.__main__",
@@ -135,8 +129,6 @@ all_imports = [
         module_path="new_albums.__main__",
         description="Makes a spotify playlist of any albums released this week (filtered by your criteria). if your spotify cred needs to be authorized, the whole program will stop here. It may be the case if chrome is logged into a different spotify, the program will pause here.",
         frequency=RunType.short,
-        # setup_file_name="new_albums.__main__",
-        # path=rf"{base_path}\new_albums",
     ),
     
     Import(
@@ -224,8 +216,6 @@ all_imports = [
         frequency=RunType.long,
         skipper=True,
     ),
-    
-    
     # Import(
     #     module_name="newmusic",
     #     description="Makes a spotify playlist for you based on your rules. if your spotify cred needs to be authorized, the whole program will stop here. It may be the case if chrome is logged into a different spotify, the program will pause here.",
@@ -238,8 +228,6 @@ all_imports = [
         module_path="spotnik.__main__",
         description="Makes a spotify playlist for you based on your rules. if your spotify cred needs to be authorized, the whole program will stop here. It may be the case if chrome is logged into a different spotify, the program will pause here.",
         frequency=RunType.short,
-        # setup_file_name="spotnik.__main__",
-        # path=rf"{base_path}\spotnik",
     ),
     Import(
         module_name="pool",

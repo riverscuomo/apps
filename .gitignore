@@ -10,7 +10,7 @@ Sentiment/
 Stresses/
 Z-BAT/
 catalog/
-# crawlers/
+crawlers/
 credentials/
 databases/
 demolisher/
@@ -86,7 +86,7 @@ lyrictransfer.py
 # maintenance.py
 maintenancetest.py
 # maintenance_config.py
-# maintenance_log.txt
+maintenance_log.txt
 message.txt
 mp3Convert.py
 network.py

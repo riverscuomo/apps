@@ -335,19 +335,6 @@ def run():
 
 def main():
 
-    """ THESE DON'T WORK YET """
-
-    # try:
-    #     print("\n kyoko :")
-    #     importlib.import_module("kyoko.__main__").main()
-    # except Exception as e:
-    #     e = traceback.format_exc() 
-    #     print(e)
-
-    
-
-
-
     print(f"Running maintenance.py with args {args}")
     result = run()
 
@@ -365,6 +352,15 @@ if __name__ == "__main__":
 
 
 """ THESE WORK (but you must run `pip install -e .` in each package directory first. Hopefully only once?) """
+
+
+    # try:
+    #     print("\n kyoko :")
+    #     importlib.import_module("kyoko.__main__").main()
+    # except Exception as e:
+    #     e = traceback.format_exc() 
+    #     print(e)
+  
 
 # """ Test poetry package new_albums: passes """
 
