@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "apps"
+version = "0.1.0"
+description = ""
+authors = ["Rivers Cuomo <riverscuomo@users.noreply.github.com>"]
+readme = "README.md"
+classifiers = ["Private :: Do Not Upload"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+crawlers = {path = "crawlers", develop = true}
+new-albums = {path = "new_albums", develop = true}
+social = {path = "social", develop = true}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
