@@ -4,6 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Rivers Cuomo <riverscuomo@users.noreply.github.com>"]
 readme = "README.md"
+classifiers = ["Private :: Do Not Upload"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
