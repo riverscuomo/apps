@@ -9,7 +9,6 @@ pattern = "%B %d, %Y %H:%M %p"
 todayString = today.strftime(pattern)
 COMPUTERNAME = os.environ["COMPUTERNAME"]
 failure_message = "FAILURE!: \n\n"
-base_path = r"C:\RC Dropbox\Rivers Cuomo\Apps"
 
 logging.basicConfig(
     filename="maintenance_log.txt",
@@ -17,7 +16,6 @@ logging.basicConfig(
     format="%(levelname)s: %(asctime)s %(message)s",
     datefmt="%m/%d/%Y %I:%M:%S",
 )
-
 
 class Report:
     def __init__(
