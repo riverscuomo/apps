@@ -85,7 +85,7 @@ lookups.py
 lyricsmanager.py
 lyrictransfer.py
 # maintenance.py
-maintenancetest.py
+# maintenancetest.py
 # maintenance_config.py
 maintenance_log.txt
 message.txt
