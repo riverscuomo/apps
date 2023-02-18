@@ -1,5 +1,5 @@
 # apps
-My monorepo of python scripts, modules, and packages. I'm currently publishing this only to get help with some issues. Almost all of the files are gitignored. 
+My monorepo of python scripts, modules, and packages. I'm currently publishing this only to get help with some issues. Almost all of the files are gitignored. https://github.com/riverscuomo/apps/blob/master/.gitignore
 
 ## Note to Self:
 To install the submodules in a way that you'll always have the latest commit, try this in each submodule directory instead of `pip install .` or `poetry install` :
