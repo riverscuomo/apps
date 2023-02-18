@@ -1,20 +1,22 @@
+import argparse
 import contextlib
+import importlib
+import os
 import pkgutil
+import runpy
+import sys
+import traceback
 from datetime import datetime
-from maintenance_config import *
+
 # from maintenance_config_copy import *
 import gspreader
 from rich import print
-import os
-import argparse
-import traceback
-import runpy
-import sys
-import importlib
 
+from maintenance_config import *
 
 maintenance_parser = argparse.ArgumentParser(
-    description="Runs many modules in the Apps folder.")
+    description="Runs many modules in the Apps folder."
+)
 maintenance_parser.add_argument(
     "-m",
     "--module",
@@ -45,10 +47,9 @@ args = maintenance_parser.parse_args()
     Module: Python file meant to be imported.
 
     Package: directory containing modules/packages. To run packages, these points may be helpful:
-    
+
     - don't have an __init__.py file in the top level of the package
     - put `from .__main__ import main` in the __init__.py file of the inner package
-    - run `pip install -e .` in the top level of the package
     - your main function should be in a file called __main__.py in the inner package
     - all other modules should be in a lower level than the __main__.py file
 
@@ -68,7 +69,6 @@ def add_skip_report(result: list):
 
 
 def build_skip_report(x):
-
     return {
         "last_run_date": todayString,
         "module_name": x.module_name,
@@ -79,26 +79,23 @@ def build_skip_report(x):
 
 
 def clear_modules_from_sys(package_name, path):
-
     """Remove all modules that were imported from this package so they don't conflict with future imports."""
 
     # Remove this path so that it doesn't get in the way of future imports.
     sys.path = [e for e in sys.path if path not in e]
 
-        # Remove all the modules that were imported from this package so they don't conflict
-        # with future imports.
+    # Remove all the modules that were imported from this package so they don't conflict
+    # with future imports.
     loaded_package_modules = [
-            key
-            for key, value in sys.modules.items()
-            if package_name in str(value)
-        ]
+        key for key, value in sys.modules.items() if package_name in str(value)
+    ]
     for key in loaded_package_modules:
         logging.info(f"deleting {key} from sys.modules")
         del sys.modules[key]
 
 
 def clear_paths():
-    """ Remove paths that may conflict with this module import"""
+    """Remove paths that may conflict with this module import"""
     APPS_HOME = os.environ["APPS_HOME"]
 
     dead_paths = [
@@ -109,7 +106,7 @@ def clear_paths():
         f"{APPS_HOME}\\new_albums",
         f"{APPS_HOME}\\demos",
         # ".",
-]
+    ]
     for d in dead_paths:
         with contextlib.suppress(Exception):
             sys.path.remove(d)
@@ -123,12 +120,11 @@ def consolidate_data(sheet_data, result_data):
 
     # First iterate through every row in the sheet.
     for sheet_row in sheet_data:
-        
         # If this row has a new result in the results data, append it to data and continue to the next row of the sheet.
-        if result_row := get_matching_result_row(sheet_row, result_data):
+        if result_row := in_data(sheet_row, result_data):
             data.append(result_row)
             continue
-        
+
         # Otherwise, append the sheet row to data.
         data.append(sheet_row)
 
@@ -156,16 +152,13 @@ def fix_import_names():
     if module == "sheettransfer":
         print("just fyi, sentiment is sheettransfer25 bro...")
         module = module.replace("sheettransfer", "sheettransfer25")
-
-    if module == "sentiment":
+    elif module == "sentiment":
         print("just fyi, sentiment is sentiment11 bro...")
         module = "sentiment11"
-
-    if module == "newalbums":
+    elif module == "newalbums":
         print("just fyi, newalbums is new_albums idiot...")
         module = "new_albums"
-
-    if module == "iaqualink":
+    elif module == "iaqualink":
         print("just fyi, iaqualink is pool idiot...")
         module = "pool"
 
@@ -178,63 +171,43 @@ def fix_import_names():
     return result
 
 
-def get_matching_result_row(sheet_row, result_data):
-    """
-    If this row was run and has a new result, return it.
-    """
-    return next(
-        (
-            result_row
-            for result_row in result_data
-            if result_row["module_name"] == sheet_row["module_name"]
-        ),
-        False,
-    )
-
-
 def get_modules_to_run():
-    """
-    
-    """
+    """ """
     # print("get_modules_to_run()")
 
     if args.type == "short":
-
         # # If you've specified that you want to do a short run
         # if argument in ["s", "short", "shortrun"]:
         imports = [
-            x for x in all_imports if x.frequency == RunType.short and x.skipper != True
+            x for x in all_imports if x.frequency == RunType.short and not x.skipper
         ]
         print("doing a short run only: \n")
         # print(shortRun)
 
     elif args.type == "weekly":
         imports = [
-            x
-            for x in all_imports
-            if x.frequency == RunType.weekly and x.skipper != True
+            x for x in all_imports if x.frequency == RunType.weekly and not x.skipper
         ]
         print("doing a weekly Imports run only: \n")
         # print(weeklyImports)
 
     elif args.module is not None:
         imports = fix_import_names()
-    
-    else:
 
+    else:
         imports = [
             x for x in all_imports if x.frequency in [RunType.short, RunType.long]
         ]
 
         # If it's MONDAY, also run these scripts
-        if datetime.now().weekday() == 0:
+        if not datetime.now().weekday():
             imports = all_imports
             print("doing a shortRun + longRun + weeklyImports: \n")
         else:
             print("doing a shortRun + longRun: \n")
 
         # remove imports that you don't need to run these days
-        imports = [x for x in imports if x.skipper != True]
+        imports = [x for x in imports if not x.skipper]
 
     return imports
 
@@ -259,10 +232,10 @@ def initialize_import(this_import):
 
 
 def print_result_to_sheet(result: list):
-    """ Print the results of all the imports and runs to the log in Google Sheets."""
+    """Print the results of all the imports and runs to the log in Google Sheets."""
     # print(result)
 
-    skipped = [x for x in all_imports if x.skipper == True]
+    skipped = [x for x in all_imports if x.skipper]
 
     skipped_result = [
         {
@@ -286,22 +259,22 @@ def print_result_to_sheet(result: list):
 
 
 def run_module(report, module_path):
-    """ Import a script from the current directory (Apps), run its main() function, and return the report."""
+    """Import a script from the current directory (Apps), run its main() function, and return the report."""
     new_module = importlib.import_module(module_path)
     logging.info(f"Successfully imported {module_path}. Now time to run its main()....")
     try:
         r = new_module.main()
-        report.message = str(r)
-        logging.info(str(r))
+        message = str(r)
+        report.message = message
+        logging.info(message)
     except Exception as e:
         r = f"Failure in {module_path}.main(): <{e}>"
-        report.message = str(r)
+        report.message = message
         logging.info(r)
     return report
 
 
 def run():
-
     logging.info("==========================================================")
     logging.info("MAINTENANCE.PY")
 
@@ -311,7 +284,6 @@ def run():
     result = []
 
     for this_import in imports:
-
         module_name, module_path, report = initialize_import(this_import)
 
         # clear_modules_from_sys(package_name, path) # this seems to mess up the module imports
@@ -322,8 +294,7 @@ def run():
             additional_message = ""
             r = f"Failure to import {module_name}. <{e}> + {additional_message}"
             logging.info(r)
-            report.message = str(r)
-
+            report.message = r
 
         result.append(report)
 
@@ -334,51 +305,43 @@ def run():
 
 
 def main():
-
     print(f"Running maintenance.py with args {args}")
     result = run()
 
     print_to_sheet = True
 
     if print_to_sheet:
-
         print_result_to_sheet(result)
 
 
 if __name__ == "__main__":
     main()
 
-
-
-
-""" THESE WORK (but you must run `pip install -e .` in each package directory first. Hopefully only once?) """
-
-
     # try:
     #     print("\n kyoko :")
     #     importlib.import_module("kyoko.__main__").main()
     # except Exception as e:
-    #     e = traceback.format_exc() 
+    #     e = traceback.format_exc()
     #     print(e)
-  
+
 
 # """ Test poetry package new_albums: passes """
 
-    # try:
-    #     print("\n demos :")
-    #     importlib.import_module("demos.__main__").main()
-    # except Exception as e:
-    #     e = traceback.format_exc() 
-    #     print(e)
+# try:
+#     print("\n demos :")
+#     importlib.import_module("demos.__main__").main()
+# except Exception as e:
+#     e = traceback.format_exc()
+#     print(e)
 
-    # exit()
+# exit()
 
 # try:
 #     print("\nnew_albums:")
 #     result = importlib.import_module("new_albums.__main__").main()
 #     # print(r)
 # except Exception as e:
-#     e = traceback.format_exc() 
+#     e = traceback.format_exc()
 #     print(e)
 
 # """ Test module: passes """
@@ -387,7 +350,7 @@ if __name__ == "__main__":
 #     importlib.import_module("pool").main()
 #     # print(r)
 # except Exception as e:
-#     e = traceback.format_exc() 
+#     e = traceback.format_exc()
 #     print(e)
 
 # """ Test poetry package: ... """
@@ -395,15 +358,15 @@ if __name__ == "__main__":
 #     print("\nsocial:")
 #     importlib.import_module("social.__main__").main()
 # except Exception as e:
-#     e = traceback.format_exc() 
-    # print(e)
+#     e = traceback.format_exc()
+# print(e)
 
 # """ Test poetry package spotnik: passes """
 # try:
 #     print("\nspotnik:")
 #     importlib.import_module("spotnik.__main__").main()
 # except Exception as e:
-#     e = traceback.format_exc() 
+#     e = traceback.format_exc()
 #     print(e)
 
 # """ Test poetry package spotnik: passes """
@@ -411,7 +374,7 @@ if __name__ == "__main__":
 #     print("\n lastfmcrawler :")
 #     importlib.import_module("crawlers.lastfmcrawler.__main__").main()
 # except Exception as e:
-#     e = traceback.format_exc() 
+#     e = traceback.format_exc()
 #     print(e)
 
 # """ Test poetry package spotifycrawler:  """
@@ -419,47 +382,43 @@ if __name__ == "__main__":
 #     print("\n spotifycrawler :")
 #     importlib.import_module("crawlers.spotifycrawler.__main__").main()
 # except Exception as e:
-#     e = traceback.format_exc() 
+#     e = traceback.format_exc()
 #     print(e)
 
 # try:
 #     print("\n wme :")
 #     importlib.import_module("crawlers.wme.__main__").main()
 # except Exception as e:
-#     e = traceback.format_exc() 
+#     e = traceback.format_exc()
 #     print(e)
 
 # try:
 #     print("\n ankimove :")
 #     importlib.import_module("ankimove").main()
 # except Exception as e:
-#     e = traceback.format_exc() 
+#     e = traceback.format_exc()
 #     print(e)
 
 # try:
 #     print("\n setlistfm :")
 #     importlib.import_module("setlistfm").main()
 # except Exception as e:
-#     e = traceback.format_exc() 
+#     e = traceback.format_exc()
 #     print(e)
 
 # try:
 #     print("\n songpopularity :")
 #     importlib.import_module("songpopularity").main()
 # except Exception as e:
-#     e = traceback.format_exc() 
+#     e = traceback.format_exc()
 #     print(e)
 
 # try:
 #     print("\n songdata :")
 #     importlib.import_module("songdata").main()
 # except Exception as e:
-#     e = traceback.format_exc() 
+#     e = traceback.format_exc()
 #     print(e)
-
-    
-
-
 
 
 """ This was for dev and testing with collaborators on github. """
@@ -473,13 +432,12 @@ if __name__ == "__main__":
 #     # setup_module = importlib.import_module("new_albums", package="new_albums")
 #     # run_main(setup_module)
 
-#     # setup_module = importlib.import_module("new_albums.new_albums", package="new_albums.new_albums")  
+#     # setup_module = importlib.import_module("new_albums.new_albums", package="new_albums.new_albums")
 #     # run_main(setup_module)
 
 #     # r = runpy.run_module("new_albums", run_name="__main__")
 #     # print(r)
 
-                    
 
 # elif package_name in ["kyoko"]:
 
@@ -495,7 +453,7 @@ if __name__ == "__main__":
 
 # elif package_name in ["spotnik"]:
 
-#     report = run_poetry_package(package_name, setup_file_name, path, report) 
+#     report = run_poetry_package(package_name, setup_file_name, path, report)
 
 # elif setup_file_name is None:
 #     """
@@ -517,15 +475,14 @@ if __name__ == "__main__":
 #         report = run_poetry_package(package_name, setup_file_name, path, report)
 
 #     except Exception as e:
-#         e = traceback.format_exc()        
+#         e = traceback.format_exc()
 #         logging.error(f"Failure to import {package_name}:\n{e}")
 #         r = f"Failure to import {package_name}. <{e}>"
 #         report.message = str(r)
 
 
-
 # def run_bat_file():
-    
+
 #     # BAT FILE WORKS FOR DEMOS BUT NO RETURN VALUE
 #     bat_dir = "C:\RC Dropbox\Rivers Cuomo\Apps\Z-BAT"
 #     bat_dir = "C:\RC Dropbox\Rivers Cuomo\Apps\demos"
@@ -542,7 +499,7 @@ if __name__ == "__main__":
 #     except Exception as e:
 #         logging.info(f"Failure to run {setup_module}.main():\n{e}")
 #         r = f"Failure:\n{e}"
-#     report.message = str(r)    
+#     report.message = str(r)
 #     return report
 
 
@@ -551,7 +508,7 @@ if __name__ == "__main__":
 #     MODULE_NAME = this_import.module_name
 #     spec = importlib.util.spec_from_file_location(MODULE_NAME, MODULE_PATH)
 #     module = importlib.util.module_from_spec(spec)
-#     sys.modules[spec.name] = module 
+#     sys.modules[spec.name] = module
 #     spec.loader.exec_module(module)
 #     module.main()
 
@@ -567,7 +524,7 @@ if __name__ == "__main__":
 #     except Exception as e:
 #         logging.info(f"Failure to run {setup_module}.main():\n{e}")
 #         r = f"Failure:\n{e}"
-#     report.message = str(r)    
+#     report.message = str(r)
 #     return report
 
 
@@ -589,7 +546,6 @@ if __name__ == "__main__":
 #     report.message = str(r)
 
 #     return report
-
 
 
 # def run_main(setup_module):
