@@ -28,6 +28,7 @@ maintenance_parser.add_argument(
     help="The type of run: short, long, weekly. for a shortRun only: py maintenance.py s ",
 )
 args = maintenance_parser.parse_args()
+print('args: ', args)
 
 """
     Windows Task Scheduler runs all "longrun" programs here at 0:01 every morning.
@@ -144,11 +145,9 @@ def fix_import_names():
     if ".py" in module:
         print("DONT PUT .PY AT THE END OF THE SCRIPT ARGUMENT YOU WANT TO RUN")
         module = module.replace(".py", "")
-
     if "sheetransfer" in module:
         print("just fyi, sheettransfer has 2 Ts bro...")
         module = module.replace("sheetransfer", "sheettransfer")
-
     if module == "sheettransfer":
         print("just fyi, sentiment is sheettransfer25 bro...")
         module = module.replace("sheettransfer", "sheettransfer25")
@@ -260,6 +259,7 @@ def print_result_to_sheet(result: list):
 
 def run_module(report, module_path):
     """Import a script from the current directory (Apps), run its main() function, and return the report."""
+    logging.info(f"Running {module_path}...")
     new_module = importlib.import_module(module_path)
     logging.info(f"Successfully imported {module_path}. Now time to run its main()....")
     try:

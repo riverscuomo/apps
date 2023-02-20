@@ -1,11 +1,10 @@
 import lyricsgenius
-import re
 from rich import print
 
 import os
 from dotenv import load_dotenv
 from gspreader import *
-from crawlers.core import __main__ as crawlers
+
 
 load_dotenv()
 
@@ -16,12 +15,6 @@ GENIUS_ACCESS_TOKEN = os.getenv("GENIUS_ACCESS_TOKEN")
 WEEZER_GENIUS_ID = '12925'
 
 genius = lyricsgenius.Genius(GENIUS_ACCESS_TOKEN)
-# artist = genius.search_artist("Andy Shauf", max_songs=3, sort="title", include_features=True)
-# artist = genius.search_songs("Say It Ain't So",  )
-# song = artist.songs[0]
-# print(vars(song))
-
-# exit()
 
 class GeniusSong:
     def __init__(self, title, genius_views):
@@ -33,33 +26,34 @@ class GeniusSong:
     
 
 
-genius_songs = []
+def main():
+    genius_songs = []
 
-# artist = genius.search_artist("Weezer", sort="title", include_features=True, get_full_info=True, max_songs=1) 
-result = genius.artist_songs(WEEZER_GENIUS_ID, sort="popularity", per_page=50)
+    result = genius.artist_songs(WEEZER_GENIUS_ID, sort="popularity", per_page=50)
 
-while result["next_page"] is not None:
-    next_page = result["next_page"]
-    songs = result['songs']
-    for item in songs:
-        if "stats" in item and "pageviews" in item["stats"]:
-            song = GeniusSong(item["full_title"].replace(" by\xa0Weezer", ""), item["stats"]["pageviews"])
+    while result["next_page"] is not None:
+        next_page = result["next_page"]
+        songs = result['songs']
+        for item in songs:
+            if "stats" in item and "pageviews" in item["stats"]:
+                song = GeniusSong(item["full_title"].replace(" by\xa0Weezer", ""), item["stats"]["pageviews"])
             # print(song)
-            genius_songs.append(song)
-    result = genius.artist_songs(WEEZER_GENIUS_ID, sort="popularity", per_page=50, page=next_page)
+                genius_songs.append(song)
+        result = genius.artist_songs(WEEZER_GENIUS_ID, sort="popularity", per_page=50, page=next_page)
 
-# print(artist.id)
-# print(songs)
+    sheet = gspreader.get_sheet("Weezer Data", "all")
+    sheet_data = sheet.get_all_records()
+    new_data = [ vars(x) for x in genius_songs ]
+    print(new_data)
+
+    sheet_data = gspreader.update_sheet_data_by_matching_key(sheet_data, new_data, "song_title")
+    gspreader.update_range(sheet, sheet_data)
+
+    return "Success!"
 
 
-print(genius_songs)
 
-sheet = gspreader.get_sheet("Weezer Data", "all")
-sheet_data = sheet.get_all_records()
-new_data = [ vars(x) for x in genius_songs ]
-print(new_data)
-
-sheet_data = crawlers.update_sheet_data(sheet_data, new_data, "song_title")
-update_range(sheet, sheet_data)
+if __name__ == "__main__":
+    main()
     
 

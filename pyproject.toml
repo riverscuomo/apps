@@ -11,6 +11,7 @@ python = "^3.10"
 crawlers = {path = "crawlers", develop = true}
 new-albums = {path = "new_albums", develop = true}
 social = {path = "social", develop = true}
+gspreader = "^0.1.23"
 
 
 [build-system]
