@@ -153,6 +153,12 @@ all_imports = [
         frequency=RunType.weekly,
         # skipper=True,
     ),
+    Import(
+        module_name="geniusweezer",
+        description="updates WEEZER DATA. How many times each lyric has been viewed. Fetches data from the genius.com API.",
+        frequency=RunType.weekly,
+        # skipper=True,
+    ),
     
     Import(
         module_name="songpopularity",
