@@ -4,6 +4,7 @@ import enum
 import os
 
 today = datetime.now()
+today_number = today.day
 pattern = "%A, %B %d,  %H:%M %p"
 pattern = "%B %d, %Y %H:%M %p"
 todayString = today.strftime(pattern)
@@ -38,6 +39,8 @@ class RunType(enum.Enum):
     short = 1
     long = 2
     weekly = 3
+    biweekly = 4
+    monthly = 5
 
 
 class Import:
@@ -118,7 +121,7 @@ all_imports = [
         module_name="lastfmcrawler",
         module_path="crawlers.lastfmcrawler.__main__",
         description="updates the lastfm data on the all tab in the WEEZER DATA workbook. crawler. scraper.",
-        frequency=RunType.short,
+        frequency=RunType.biweekly,
         # skipper=True,
         failure_message=chromedriver_warning,
     ),
@@ -132,7 +135,7 @@ all_imports = [
     Import(
         module_name="songdata",
         description="Update the data in the ENCYCLOPEDIA and the SETLIST workbooks.",
-        frequency=RunType.weekly,
+        frequency=RunType.biweekly,
         failure_message=chromedriver_warning,
     ),
     Import(

@@ -41,13 +41,15 @@ def main():
                 genius_songs.append(song)
         result = genius.artist_songs(WEEZER_GENIUS_ID, sort="popularity", per_page=50, page=next_page)
 
-    sheet = gspreader.get_sheet("Weezer Data", "all")
-    sheet_data = sheet.get_all_records()
+    
     new_data = [ vars(x) for x in genius_songs ]
     print(new_data)
 
-    sheet_data = gspreader.update_sheet_data_by_matching_key(sheet_data, new_data, "song_title")
-    gspreader.update_range(sheet, sheet_data)
+    for sheet in [gspreader.get_sheet("Weezer Data", "all"), gspreader.get_sheet("Setlist", "data")]:
+        sheet_data = sheet.get_all_records()
+        sheet_data = gspreader.update_sheet_data_by_matching_key(sheet_data, new_data, "song_title")
+        gspreader.update_range(sheet, sheet_data)
+
 
     return "Success!"
 
