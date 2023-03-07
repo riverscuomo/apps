@@ -80,6 +80,7 @@ chromedriver_warning = """\\nnThis will fail when the chrome version has passed 
             "Download from here https://chromedriver.chromium.org/downloads and replace files in /apps . 
             If theyve updated their terms&conditions and you need to check the box, this program will also fail."""
 
+
 all_imports = [
 
     Import(
@@ -223,13 +224,6 @@ all_imports = [
         frequency=RunType.long,
         skipper=True,
     ),
-    # Import(
-    #     module_name="newmusic",
-    #     description="Makes a spotify playlist for you based on your rules. if your spotify cred needs to be authorized, the whole program will stop here. It may be the case if chrome is logged into a different spotify, the program will pause here.",
-    #     frequency=RunType.short,
-    #     setup_file_name="__main__",
-    #     # path=rf"{base_path}",
-    # ),
     Import(
         module_name="spotnik",
         module_path="spotnik.__main__",

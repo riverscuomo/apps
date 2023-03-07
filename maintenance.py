@@ -160,6 +160,10 @@ def fix_import_names():
     elif module == "iaqualink":
         print("just fyi, iaqualink is pool idiot...")
         module = "pool"
+    elif module == "newmusic":
+        print("newmusic doesn't exist anymore! You cahnged it to spotkin")
+        exit()
+
 
     print("You've made a command line module of", module)
 
@@ -281,11 +285,13 @@ def run_module(report, module_path):
     try:
         r = new_module.main()
         message = str(r)
+        print(message)
         report.message = message
         logging.info(message)
     except Exception as e:
-        r = f"Failure in {module_path}.main(): <{e}>"
-        report.message = message
+        r = f"Failure in {module_path}.main(): <{traceback.format_exc()}>"
+        print(r)
+        report.message = r
         logging.info(r)
     return report
 
