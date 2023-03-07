@@ -49,3 +49,6 @@ Editable installs allow you to install your project without copying any files. I
 
 So if I ran `pip install -e .` on apps/, it wouldn't install all the projects in apps/ as packages. You need to install each project separately by navigating to their directory and running `pip install -e .` in each one. All you need to do in apps/ is run `pip install -r requirements.txt` to install all the packages in the requirements.txt file.
 
+## Daily Runs From the `Maintenance.py` Script:
+I think maintenance.py is importing and running the (editable) installed version in .venv\Lib\site-packages\
+
