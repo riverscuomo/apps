@@ -100,7 +100,7 @@ Pipfile
 py
 quote_source_lyric_reference.py
 rctweetcleaner-3d2160633739.json
-README.md
+# README.md
 rejectcleaner.pyw
 rejects.txt
 requirements.txt
@@ -108,7 +108,7 @@ requirementsOld.txt
 save_filenames_to_txt.py
 setlistfm.py
 somfyMagic.py
-songdata.py
+# songdata.py
 songpopularity.py
 spotifytest.py
 sweetThings.txt
