@@ -82,6 +82,13 @@ chromedriver_warning = """\\nnThis will fail when the chrome version has passed 
 
 
 all_imports = [
+    Import(
+        module_name="weezerplayback",
+        description="clean up the Weezer Playback folder: move old ableton and json setlists to Previous.",
+        frequency=RunType.short,
+        # skipper=True,
+        # failure_message="\nFREQUENT FAILURE: If there is a new version of anki asking to be downloaded, ankimove.py will fail.\nIf I can't find cards, remember the cards must be created in catalog.py first.",
+    ),
 
     Import(
         module_name="ankimove",

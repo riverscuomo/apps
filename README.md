@@ -11,13 +11,13 @@ here is the report it prints after running each day.
 
 ## Installation
 ### Create the venv (use the name of the computer, such as G for desktop or 9 for laptop)
-"C:\Users\aethe\AppData\Local\Programs\Python\Python310\python" -m venv .G
+"C:\Users\aethe\AppData\Local\Programs\Python\Python311\python" -m venv .G
 "C:\Users\Rivers Cuomo\AppData\Local\Programs\Python\Python310\python.exe" -m venv .9
 
 Make sure you open a new terminal to activate the venv. Otherwise you'll be installing packages into the global python environment?
 
 ### Install the packages in requirements.txt into the venv\Lib\site-packages directory
-`pip install -r requirements.txt`
+pip install -r requirements.txt
 
 You'll notice the local packages are not installed. That's because they are not in the requirements.txt file. You need to install them separately.
 
@@ -37,7 +37,11 @@ These are published on pypi, so you technically could put them in requirements.t
 pip install -e gspreader/.
 pip install -e rivertils/.
 
-
+## Upgrading python
+Unfortunately the upgrade command doesn't work for me. So do this instead:
+1. Download the latest version of python from https://www.python.org/downloads/
+2. Delete the venv directory
+3. Create a new venv with the new version of python, using the instructions above
 
 ## Notes
 To install the submodules in a way that you'll always have the latest commit, try this in each submodule directory:
