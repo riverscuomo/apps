@@ -5,6 +5,7 @@
 .vscode/
 
 # apps packages
+app_core/
 Rhymes/
 Sentiment/
 Stresses/
@@ -26,6 +27,7 @@ kyoko/
 leo/
 lyricleaner/
 ma/
+mp3tagger/
 # new_albums/
 newmusic/
 pyexiftool/
@@ -77,6 +79,7 @@ hello.py
 iaqualink.log
 info.dat
 itb.py
+jwtstuff.py
 kyoko_videos.py
 lastfm.py
 lookup.py
@@ -129,6 +132,7 @@ weezle.py
 wme.py
 wmepdf.py
 word_list_weezer.txt
+yourip.py
 youtube.py
 
 # Standard Python .gitignore

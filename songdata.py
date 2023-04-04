@@ -665,7 +665,7 @@ def view_count(data):
 
         try:
 
-            viewCount = youtube_search(search_str)
+            viewCount = youtube_views(search_str)
 
             # print(search_str, viewCount)
 
