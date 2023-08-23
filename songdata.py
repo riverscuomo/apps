@@ -1,6 +1,7 @@
 import argparse
 import contextlib
 from datetime import datetime
+from logging import Logger
 import gspreader.gspreader as gspreader
 from youtube import youtube_search
 from lookups import *
@@ -72,9 +73,9 @@ def durationsSongpopularityArtistidTrackid(data):
             row = fetch_missing_track_id(row)
 
         with contextlib.suppress(Exception):
-            print(
-                f"looking up durationsSongpopularityArtistidTrackid for {row['track_id']}"
-            )
+            # print(
+            #     f"looking up durationsSongpopularityArtistidTrackid for {row['track_id']}"
+            # )
             result = spotify.track(row["track_id"], market="US")
             row["artist_id"] = result["artists"][0]["id"]
             if row["duration"] in ["", 0, 1]:
@@ -140,6 +141,7 @@ def fetch_missing_track_id(row):
         except Exception:
             print("No match....or ", not_responding)
             sleep(0.5)
+            Logger.log(row)
             counter = counter + 1
             if counter > 2:
                 print(

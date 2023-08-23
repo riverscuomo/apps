@@ -76,9 +76,15 @@ skip_report = {
 }
 
 
-chromedriver_warning = """\\nnThis will fail when the chrome version has passed the chromedriver version. Youll have to download the new chromedriver.
-            "Download from here https://chromedriver.chromium.org/downloads and replace files in /apps . 
-            If theyve updated their terms&conditions and you need to check the box, this program will also fail."""
+chromedriver_warning = """
+Failure: your chrome version has passed the chromedriver version. 
+You'll have to download the new chromedriver. 
+
+- First check your chrome version by going to chrome://settings/help. 
+- Then download from here https://chromedriver.chromium.org/downloads 
+  and replace files in /apps.
+"""
+            # If they've updated their terms & conditions and you need to check the box, this program will also fail."""
 
 
 all_imports = [
