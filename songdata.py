@@ -758,9 +758,9 @@ def main():
 
         if sheet_title == "Setlist.0":
 
-            if args.method in ["show_sections", "all"]:
-                show_sections(data[starting_row:])
-                updated = True
+        #     if args.method in ["show_sections", "all"]:
+        #         show_sections(data[starting_row:])
+        #         updated = True
 
             # Just for the Setlist.data tab. doesn't change anything in Setlist.0
             if args.method in ["viewcount","all"]:  # or datetime.today().weekday() == 4:
