@@ -35,8 +35,6 @@ _ProactorBasePipeTransport.__del__ = silence_event_loop_closed(
     _ProactorBasePipeTransport.__del__
 )
 
-""" """
-
 
 async def connectToIAqua(temp):
     print("connectToIAqua...")
@@ -59,15 +57,12 @@ def getTemp():
     print("getTemp...")
     sheet = get_sheet("Calendar: weezer/rc", 0)
     data = sheet.get_all_records(head=2)
-    today = datetime.today().date()
+    today = datetime.now().date()
 
-
-    for row in data:
+    for row in data:      
         calDateString = row["date"] + " " + str(row["year"])
         calDateDto = timestampToDateObject(calDateString).date()
         if calDateDto == today:
-            # print(today)
-            # print(row['pool'])
             return int(row["pool"])
 
 

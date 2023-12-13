@@ -100,7 +100,7 @@ all_imports = [
         module_name="ankimove",
         description="move lyric cards in and out of LYRICS. DOES NOT CREATE CARDS which is done by catalog.py\n\nTo simply create new cards that already have rows in ANKI CARDS FOR LYRICS spreadsheet: uncomment the main() function in catalog/anki_functions.",
         frequency=RunType.short,
-        # skipper=True,
+        skipper=True,
         failure_message="\nFREQUENT FAILURE: If there is a new version of anki asking to be downloaded, ankimove.py will fail.\nIf I can't find cards, remember the cards must be created in catalog.py first.",
     ),
     Import(
@@ -156,13 +156,13 @@ all_imports = [
         module_name="sheettransfer25",
         description="Analyzes stresses and word_freq for LYRICS and TITLES",
         frequency=RunType.long,
-        skipper=True,
+        skipper=False,
     ),
     Import(
         module_name="rhymes",
         description="determines rhymes for LYRICS and TITLES",
         frequency=RunType.long,
-        skipper=True,
+        skipper=False,
     ),
     Import(
         module_name="setlistfm",
@@ -191,6 +191,7 @@ all_imports = [
         description="updates the spotify data on the spotify tab in the SETLIST workbook. crawler. scraper. AND Weezer Data spreadsheet, all tab.",
         frequency=RunType.weekly,
         failure_message=chromedriver_warning,
+        skipper=True,
     ),
     Import(
         module_name="sentiment11",
@@ -235,7 +236,7 @@ all_imports = [
                 that creates lyric docs from the titles.
                 """,
         frequency=RunType.long,
-        skipper=True,
+        skipper=False,
     ),
     Import(
         module_name="spotnik",

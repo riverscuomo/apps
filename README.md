@@ -12,9 +12,10 @@ here is the report it prints after running each day.
 ## Installation
 ### Create the venv (use the name of the computer, such as G for desktop or 9 for laptop)
 "C:\Users\aethe\AppData\Local\Programs\Python\Python311\python" -m venv .G
-"C:\Users\Rivers Cuomo\AppData\Local\Programs\Python\Python310\python.exe" -m venv .9
+"C:\Users\Rivers Cuomo\AppData\Local\Programs\Python\Python311\python.exe" -m venv .9
+Make sure you open a new terminal to activate the venv. Otherwise you'll be installing packages into the global python environment.
+!!! activate with .9\Scripts\activate .G\Scripts\activate !!!
 
-Make sure you open a new terminal to activate the venv. Otherwise you'll be installing packages into the global python environment?
 
 ### Install the packages in requirements.txt into the venv\Lib\site-packages directory
 pip install -r requirements.txt
@@ -32,16 +33,25 @@ pip install -e kyoko/.
 pip install -e new_albums/.
 pip install -e social/.
 pip install -e spotnik/.
-
-These are published on pypi, so you technically could put them in requirements.txt, but I don't want to do that because I want to be able to edit them locally and have the changes take effect immediately?
 pip install -e gspreader/.
 pip install -e rivertils/.
 
+#### Or as a one-liner
+pip install -e crawlers/. && pip install -e demos/. && pip install -e kyoko/. && pip install -e new_albums/. && pip install -e social/. && pip install -e spotnik/. && pip install -e gspreader/. && pip install -e rivertils/.
+
+The last 2 are published on pypi, so you technically could put them in requirements.txt, but I don't want to do that because I want to be able to edit them locally and have the changes take effect immediately?
+
 ## Upgrading python
+** Warning: this is non-trivial as some required packages may not be compatible with the latest version of python. (Numba, I'm looking at you.) So don't be greedy like ooo I'm gonna get the latest, 
+fastest Python.**
 Unfortunately the upgrade command doesn't work for me. So do this instead:
 1. Download the latest version of python from https://www.python.org/downloads/
-2. Delete the venv directory
-3. Create a new venv with the new version of python, using the instructions above
+Use CMD instead of Powershell
+2. Deactivate the old venv
+3. rename the old venv: .G -> .G_old
+4. Create a new venv with the new version of python, using the instructions above
+5. !!! activate with .9\Scripts\activate .G\Scripts\activate !!!
+
 
 ## Notes
 To install the submodules in a way that you'll always have the latest commit, try this in each submodule directory:
