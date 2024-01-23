@@ -10,7 +10,9 @@ here is the report it prints after running each day.
 ![image](https://user-images.githubusercontent.com/24362267/218493412-d48bccbd-54e4-462a-987d-bd23849c1b3e.png)
 
 ## Installation
-### Create the venv (use the name of the computer, such as G for desktop or 9 for laptop)
+### Create the venv (use the name of the computer, such as G for desktop or 9 for laptop), 
+Make sure you have an approved version of Python (probably not the latest version)
+Currently we're on 3.11.5
 "C:\Users\aethe\AppData\Local\Programs\Python\Python311\python" -m venv .G
 "C:\Users\Rivers Cuomo\AppData\Local\Programs\Python\Python311\python.exe" -m venv .9
 Make sure you open a new terminal to activate the venv. Otherwise you'll be installing packages into the global python environment.
@@ -40,6 +42,15 @@ pip install -e rivertils/.
 pip install -e crawlers/. && pip install -e demos/. && pip install -e kyoko/. && pip install -e new_albums/. && pip install -e social/. && pip install -e spotnik/. && pip install -e gspreader/. && pip install -e rivertils/.
 
 The last 2 are published on pypi, so you technically could put them in requirements.txt, but I don't want to do that because I want to be able to edit them locally and have the changes take effect immediately?
+
+### Add the environment variables to your system
+Find the environment variables in the .env file or look it up in other devices
+GSPREADER_GOOGLE_CLIENT_EMAIL=hailmary@rctweetcleaner.iam.gserviceaccount.com
+GSPREADER_GOOGLE_CREDS_PATH=C:\RC Dropbox\Rivers Cuomo\Apps\credentials\rctweetcleaner-3d2160633739.json
+SPOTIFY_CLIENT_ID
+SPOTIFY_CLIENT_SECRET
+SPOTIFY_REDIRECT_URL
+SETLIST_FM_API_KEY
 
 ## Upgrading python
 ** Warning: this is non-trivial as some required packages may not be compatible with the latest version of python. (Numba, I'm looking at you.) So don't be greedy like ooo I'm gonna get the latest, 

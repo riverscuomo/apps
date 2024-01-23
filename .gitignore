@@ -1,6 +1,7 @@
 # apps environments
 .9/
 .G/
+.1/
 
 .vscode/
 
@@ -63,8 +64,9 @@ anki_media_clean.py
 answer.mp3
 asanatask.py
 AWSCLIV2.msi
+bandsweplaywith.py
 beeper.py
-calendarShift.py
+calshift.py
 chromedriver.exe
 cleaner.py
 colors.py
@@ -123,6 +125,7 @@ test._file
 textcleaner.py
 token.json
 tokenCALENDARSHIFT.json
+truncate_silence.py
 tweetdelete.py
 tweetScrape.py
 tweet_dumper.py
