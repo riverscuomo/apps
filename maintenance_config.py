@@ -199,15 +199,17 @@ songdata_import = Import(
     failure_message=chromedriver_warning,
 )
 
-sheettransfer25_import = Import(
-    module_name="sheettransfer25",
-    description="Analyzes stresses and word_freq for LYRICS and TITLES",
+lyricprocessor_import = Import(
+    module_name="lyricprocessor",
+    module_path="lyricprocessor.__main__",
+    description="Processes the word stresses and word_freqs and fills in those columns in LYRICS and TITLES",
     frequency=RunType.long,
     skipper=False,
 )
 
 rhymes_import = Import(
     module_name="rhymes",
+    module_path="rhymes.__main__",
     description="determines rhymes for LYRICS and TITLES",
     frequency=RunType.long,
     skipper=False,
@@ -316,7 +318,7 @@ all_imports = [
     lyrictransfer_import,
     lastfmcrawler,    
     songdata_import,
-    sheettransfer25_import,
+    lyricprocessor_import,
     rhymes_import,
     setlistfm_import,
     geniusweezer_import,

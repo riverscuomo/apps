@@ -32,11 +32,14 @@ pip install -e crawlers/spotifycrawler/. -->
 pip install -e crawlers/.
 pip install -e demos/.
 pip install -e kyoko/.
+pip install -e lyricprocessor/.
 pip install -e new_albums/.
+pip install -e rhymes/.
 pip install -e social/.
 pip install -e spotnik/.
 pip install -e gspreader/.
 pip install -e rivertils/.
+
 
 #### Or as a one-liner
 pip install -e crawlers/. && pip install -e demos/. && pip install -e kyoko/. && pip install -e new_albums/. && pip install -e social/. && pip install -e spotnik/. && pip install -e gspreader/. && pip install -e rivertils/.

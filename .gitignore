@@ -7,9 +7,8 @@
 
 # apps packages
 app_core/
-Rhymes/
+rhymes/
 Sentiment/
-Stresses/
 Z-BAT/
 catalog/
 crawlers/
@@ -27,6 +26,7 @@ gspreader/
 kyoko/
 leo/
 lyricleaner/
+lyricprocessor/
 ma/
 mp3tagger/
 # new_albums/

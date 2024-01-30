@@ -2,16 +2,10 @@ import argparse
 import contextlib
 import importlib
 import os
-import pkgutil
-import runpy
 import sys
 import traceback
-from datetime import datetime
-
-# from maintenance_config_copy import *
 import gspreader
 from rich import print
-
 from maintenance_config import *
 
 maintenance_parser = argparse.ArgumentParser(
@@ -335,6 +329,7 @@ def run():
 def main():
     print(f"Running maintenance.py with args {args}")
     result = run()
+    print(result)
 
     print_to_sheet = True
 
