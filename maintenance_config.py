@@ -4,7 +4,8 @@ import enum
 import os
 
 today = datetime.now()
-today_number = today.day
+current_day_of_month = today.day
+current_day_of_week = datetime.today().weekday()
 pattern = "%A, %B %d,  %H:%M %p"
 pattern = "%B %d, %Y %H:%M %p"
 todayString = today.strftime(pattern)
@@ -301,7 +302,6 @@ bandsweplaywith_import = Import(
 )
 
 all_imports = [
-
     pool_import,
     new_albums_import,
     spotnik_import,
@@ -309,16 +309,12 @@ all_imports = [
     weezerplayback_import,
     lyricsmanager_import,
     bandsweplaywith_import,
-
     demos_import,
-
     ankimove_import,
-    catalog_import, 
-    
+    catalog_import,     
     tweetDelete_import,
     lyrictransfer_import,
-    lastfmcrawler,
-    
+    lastfmcrawler,    
     songdata_import,
     sheettransfer25_import,
     rhymes_import,
@@ -330,5 +326,4 @@ all_imports = [
     wme_import,
     wmepdf_import,
     ITB_import,
-
 ]
