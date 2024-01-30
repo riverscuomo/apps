@@ -5,7 +5,7 @@ import os
 
 today = datetime.now()
 current_day_of_month = today.day
-current_day_of_week = datetime.today().weekday()
+current_day_of_week = today.weekday()
 pattern = "%A, %B %d,  %H:%M %p"
 pattern = "%B %d, %Y %H:%M %p"
 todayString = today.strftime(pattern)
