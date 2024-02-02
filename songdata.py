@@ -25,8 +25,11 @@ from catalog.scripts.genius_rc import *
 
 
 """
-updates the data for existing rows in "Setlist", 
-"Encyclopedia o' Riffs" using the spotify API, lyrics genius API, youtube API, and openai API
+updates the data for existing rows in "Setlist", "Encyclopedia o' Riffs" using the following APIs:
+- spotify API
+- lyrics genius API
+- youtube API
+- openai API
 """
 
 print("\nsongdata.py")
@@ -190,7 +193,7 @@ def ensure_headers(sheet, sheet_title):
             print("adding column for '{0}'".format(necessary_header))
 
             sheet.add_cols(1)
-            sheet = sheets.open(sheet_title).get_worksheet(0)
+            sheet = gspread_client.open(sheet_title).get_worksheet(0)
             col_count = col_count + 1
             sheet.update_cell(1, col_count, necessary_header)
 
@@ -349,7 +352,7 @@ def get_spotify():
     return spotify
 
 
-def get_sheets():
+def get_gspread_client():
     print("signing into google...")
     # get approved
     # scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/spreadsheets']
@@ -357,11 +360,11 @@ def get_sheets():
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive",
     ]
-    creds = ServiceAccountCredentials.from_json_keyfile_name(os.environ.get("ENCYCLOPEDIA_SERVICE_ACCOUNT"), scope)
+    gspread_creds = ServiceAccountCredentials.from_json_keyfile_name(os.environ.get("ENCYCLOPEDIA_SERVICE_ACCOUNT"), scope)
 
-    # print(creds)
-    sheets = gspread.authorize(creds)
-    return creds,sheets
+    # print(gspread_creds)
+    gspread_client = gspread.authorize(gspread_creds)
+    return gspread_creds,gspread_client
 
 
 # spotify artist method
@@ -697,11 +700,11 @@ def view_count(data):
 not_responding = (
     "Spotify API not responding. Hold on for 5 seconds and we'll try again..."
 )
-
+header_row_in_sheet = 1
 
 args = get_args()
 sheetlist = get_sheetlist(args)
-header_row_in_sheet = 1
+
 starting_row = int(args.first) - 2 if args.first else header_row_in_sheet -1
 print("starting row in sheet", int(args.first) if args.first else "1")
 print("starting_row of data", starting_row)
@@ -712,12 +715,12 @@ if args.method in ["durationsSongpopularityArtistidTrackid", "all", "tempoEnergy
 
     spotify = get_spotify()
 
-creds, sheets = get_sheets()
+gspread_creds, gspread_client = get_gspread_client()
 
 def main():
     
-
-    for sheet_tuple in sheetlist:
+    print("# let's skip the encyclopedia for now")
+    for sheet_tuple in [sheetlist[0]]: 
 
         updated = False
 
@@ -770,8 +773,8 @@ def main():
         # # I HAVE TO RE-AUTHORIZE BECAUSE MY CREDS HAVE EXPIRED
         # # HOPEFULLY NOTHING HAS CHANGED IN THE HOUR SINCE YOU STARTED RUNNING THE PROGRAM???
 
-        # sheets = gspread.authorize(creds)
-        # sheet = sheets.open(sheet_title).get_worksheet(0)
+        # gspread_client = gspread.authorize(gspread_creds)
+        # sheet = gspread_client.open(sheet_title).get_worksheet(0)
         # print(data)
 
         if updated:

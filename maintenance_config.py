@@ -192,12 +192,6 @@ new_albums_import = Import(
     frequency=RunType.short,
 )
 
-songdata_import = Import(
-    module_name="songdata",
-    description="Update the data in the ENCYCLOPEDIA and the SETLIST workbooks.",
-    frequency=RunType.biweekly,
-    failure_message=chromedriver_warning,
-)
 
 lyricprocessor_import = Import(
     module_name="lyricprocessor",
@@ -229,6 +223,17 @@ geniusweezer_import = Import(
     # skipper=True,
 )
 
+songdata_import = Import(
+    module_name="songdata",
+    description="updates the data for existing rows in SETLIST, ENCYCLOPEDIA using the following APIs:"
+        "- spotify API"
+        "- lyrics genius API"
+        "- youtube API"
+        "- openai API",
+    frequency=RunType.biweekly,
+    # failure_message=chromedriver_warning,
+)
+
 songpopularity_import = Import(
     module_name="songpopularity",
     description="""update Spotify stats on the popularity tab in the SETLIST workbook. updates the data for existing rows in SETLIST/popularity tab"
@@ -236,6 +241,7 @@ songpopularity_import = Import(
         of songs you've chosen to track by adding to this sheet.
         Songs are not added automatically.""",
     frequency=RunType.weekly,
+    skipper=True,
 )
 
 spotifycrawler_import = Import(

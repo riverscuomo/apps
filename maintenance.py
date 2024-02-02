@@ -22,7 +22,7 @@ maintenance_parser.add_argument(
         help="The type of run: short, long, weekly, or biweekly. for a shortRun only: py maintenance.py -t short ",
     choices=["short", "long", "weekly", "biweekly"],)
 args = maintenance_parser.parse_args()
-print('args: ', args)
+# print('args: ', args)
 
 """
     Windows Task Scheduler runs all "longrun" programs here at 0:01 every morning.
@@ -170,60 +170,64 @@ def fix_import_names():
 
 def get_modules_to_run():
     """ """
-    # print("get_modules_to_run()")
+    runs = []
 
     # If you've specified a module to run, make sure that it's name is correct.
     # Names don't need to be fixed if the modules were set from config because those have no errors.
     # It's just when you're running with a module specified at the command line that they may have errors.
     if args.module is not None:
         imports = fix_import_names()
+        runs.append(args.module)
 
-    # If you've specified that you want to run a certain frequency type, collect those modules
-    elif args.type == "short":
-        # # If you've specified that you want to do a short run
-        # if argument in ["s", "short", "shortrun"]:
-        imports = [
-            x for x in all_imports if x.frequency == RunType.short and not x.skipper
-        ]
-        print("doing a short run only: \n")
-    elif args.type == "weekly":
-        imports = [
-            x for x in all_imports if x.frequency == RunType.weekly and not x.skipper
-        ]
-        print("doing a weekly Imports run only: ")
-    elif args.type == "biweekly":
-        imports = [
-            x for x in all_imports if x.frequency == RunType.biweekly and not x.skipper
-        ]
-        print("doing a biweekly Imports run only: ")
+    elif args.type is not None:
+        
+
+        # If you've specified that you want to run a certain frequency type, collect those modules
+        if args.type == "short":
+            # # If you've specified that you want to do a short run
+            # if argument in ["s", "short", "shortrun"]:
+            imports = [
+                x for x in all_imports if x.frequency == RunType.short and not x.skipper
+            ]
+            runs.append("shortRun")
+        elif args.type == "weekly":
+            imports = [
+                x for x in all_imports if x.frequency == RunType.weekly and not x.skipper
+            ]
+            runs.append
+        elif args.type == "biweekly":
+            imports = [
+                x for x in all_imports if x.frequency == RunType.biweekly and not x.skipper
+            ]
+            runs.append("biweeklyImports")
 
     # If you haven't specficed a frequency type, load the short and long runs to start with
     else:
         imports = [
             x for x in all_imports if x.frequency in [RunType.short, RunType.long]
         ]
+        runs.extend(["shortRun", "longRun"])
 
         # # If it's the first day of the month, also run these weekly 
         # if current_day_of_month in [1, 8, 15, 22]:
         #     imports += [x for x in all_imports if x.frequency == RunType.weekly]
         #     print("doing a shortRun + longRun + weeklyImports: \n")
 
-    # Check if today is Sunday (where Monday is 0 and Sunday is 6)
-    if current_day_of_week == 6:  # 6 represents Sunday
-        imports += [x for x in all_imports if x.frequency == RunType.weekly]
-        print("doing a shortRun + longRun + weeklyImports: \n")
+        # Check if today is Sunday (where Monday is 0 and Sunday is 6)
+        if current_day_of_week == 6:  # 6 represents Sunday
+            imports += [x for x in all_imports if x.frequency == RunType.weekly]
+            runs.append("weeklyImports")
 
-    # Twice a month, on the 1st and 15th, do the biweekly imports
-    if current_day_of_month in [1, 15]:
-        imports += [x for x in all_imports if x.frequency == RunType.biweekly]
-        print("doing a shortRun + longRun + weeklyImports + biweeklyImports: \n")
+        # Twice a month, on the 1st and 15th, do the biweekly imports
+        if current_day_of_month in [1, 15]:
+            imports += [x for x in all_imports if x.frequency == RunType.biweekly]
+            runs.append("biweeklyImports")
 
-        if current_day_of_month == 1:
-            imports += [x for x in all_imports if x.frequency == RunType.monthly]
-            print("doing a shortRun + longRun + weeklyImports + biweeklyImports + monthly: \n")
+            if current_day_of_month == 1:
+                imports += [x for x in all_imports if x.frequency == RunType.monthly]
+                runs.append("monthlyImports")
 
-    # else:
-    #         print("doing a shortRun + longRun: \n")
+    print(f"RunTypes={runs}")
 
         # remove imports that you don't need to run these days
     imports = [x for x in imports if not x.skipper]
@@ -327,7 +331,7 @@ def run():
 
 
 def main():
-    print(f"Running maintenance.py with args {args}")
+    # print(f"Running maintenance.py with args {args}")
     result = run()
     print(result)
 

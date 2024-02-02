@@ -27,8 +27,6 @@ You'll notice the local packages are not installed. That's because they are not 
 `cd gspreader`
 `pip install -e .`
 
-<!-- pip install -e crawlers/lastfmcrawler/.
-pip install -e crawlers/spotifycrawler/. -->
 pip install -e crawlers/.
 pip install -e demos/.
 pip install -e kyoko/.
@@ -47,13 +45,7 @@ pip install -e crawlers/. && pip install -e demos/. && pip install -e kyoko/. &&
 The last 2 are published on pypi, so you technically could put them in requirements.txt, but I don't want to do that because I want to be able to edit them locally and have the changes take effect immediately?
 
 ### Add the environment variables to your system
-Find the environment variables in the .env file or look it up in other devices
-GSPREADER_GOOGLE_CLIENT_EMAIL=hailmary@rctweetcleaner.iam.gserviceaccount.com
-GSPREADER_GOOGLE_CREDS_PATH=C:\RC Dropbox\Rivers Cuomo\Apps\credentials\rctweetcleaner-3d2160633739.json
-SPOTIFY_CLIENT_ID
-SPOTIFY_CLIENT_SECRET
-SPOTIFY_REDIRECT_URL
-SETLIST_FM_API_KEY
+Find the environment variables in the .env file or look it up in other devices' System Environment Variables.
 
 ## Upgrading python
 ** Warning: this is non-trivial as some required packages may not be compatible with the latest version of python. (Numba, I'm looking at you.) So don't be greedy like ooo I'm gonna get the latest, 
