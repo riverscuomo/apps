@@ -218,7 +218,7 @@ def fetch_openai(prompt, temperature):
     2. The Emotional Ballads section will feature slower-paced songs with poignant lyrics about love and relationships. The instrumentals provide a reflective atmosphere that may be heavy at times, but ultimately brings comfort. 
     3. The Dark and Heavy section will focus on heavier topics such as mental health/anxiety struggles or social commentary/satire. These songs will have intense instrumentals to match the mood of the lyrical content, allowing for an honest exploration of these issues in a safe space.  
     4. the Fun and Uplifting segment will have a similar vibe but with deeper lyrics that speak to mental health/anxiety struggles or spiritual enlightenment. The instrumentals may be slightly slower paced than in the Pop Party section, however they are still uplifting as they celebrate hope for brighter days ahead.
-    You are going to analyze 2 pieces of data: the song's spotify audio feature "energy" and the song's lyrics and then return 1 of these 4 strings, corresponding to the type of song you think it is. Make sure you only return one of these 4 strings with no other test around it. Here are the 4 strings in a list:
+    You are going to analyze 2 pieces of data: the song's spotify audio feature "energy" and the song's lyrics and then return 1 of these 4 strings, corresponding to the type of song you think it is. Make sure you only return one of these 4 strings with no other text around it. Here are the 4 strings in a list:
     ["1. Pop Party", "2. Emotional Ballads", "3. Dark and Heavy", "4 . Fun and Uplifting"]. 
     Now here are the song lyrics:
     """
