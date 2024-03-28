@@ -124,7 +124,7 @@ demos_import = Import(
 kyoko_import = Import(
         module_name="kyoko",
         module_path="kyoko.__main__",
-        description="Sends an email to Kyoko if there is a stress level > 0 or a flight duration",
+        description="Sends an email to Kyoko if there is a stress level > 0, a flight duration, or a rain/pool cover warning.",
         frequency=RunType.short,
         # skipper=True,
     )
@@ -191,7 +191,6 @@ new_albums_import = Import(
     description="Makes a spotify playlist of any albums released this week (filtered by your criteria). if your spotify cred needs to be authorized, the whole program will stop here. It may be the case if chrome is logged into a different spotify, the program will pause here.",
     frequency=RunType.short,
 )
-
 
 lyricprocessor_import = Import(
     module_name="lyricprocessor",

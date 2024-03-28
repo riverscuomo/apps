@@ -75,6 +75,7 @@ convert.py
 coordinates.py
 debug.log
 desktop.ini
+dropbox_utils.py
 getGoogleDocText.py
 gmailScripts.py
 hello.py
@@ -118,6 +119,7 @@ songpopularity.py
 spotifytest.py
 sweetThings.txt
 szns.py
+taylor.py
 temp.txt
 test.py
 test.wav

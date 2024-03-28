@@ -1,9 +1,10 @@
+from catalog.scripts.genius_rc import *
 import argparse
 import contextlib
 from datetime import datetime
-from logging import Logger
+import logging as songdata_logger
 import gspreader.gspreader as gspreader
-from youtube import youtube_search
+from youtube import youtube_views
 from lookups import *
 import sys
 import spotipy
@@ -21,7 +22,14 @@ from rich import print
 sys.path.insert(0, "C:\RC Dropbox\Rivers Cuomo\Apps\spotify")
 sys.path.insert(0, "C:\RC Dropbox\Rivers Cuomo\Apps")
 
-from catalog.scripts.genius_rc import *
+
+songdata_logger.basicConfig(
+    force=True,
+    filename="maintenance_log.txt",
+    level=songdata_logger.INFO,
+    format="%(levelname)s: %(asctime)s %(message)s",
+    datefmt="%m/%d/%Y %I:%M:%S",
+)
 
 
 """
@@ -35,6 +43,7 @@ updates the data for existing rows in "Setlist", "Encyclopedia o' Riffs" using t
 print("\nsongdata.py")
 
 debug = False
+
 
 def cell_contains_data(cell: str):
     return cell not in ["", "--", "unknown"]
@@ -99,7 +108,8 @@ def durationsSongpopularityArtistidTrackid(data):
                 print("preview_url: ", row["preview_url"])
         if row["track_id_alternate"] != "":
             result2 = spotify.track(row["track_id_alternate"], market="US")
-            row["song_popularity"] = max(result2["popularity"], result["popularity"])
+            row["song_popularity"] = max(
+                result2["popularity"], result["popularity"])
 
 
 def fetch_missing_track_id(row):
@@ -107,7 +117,8 @@ def fetch_missing_track_id(row):
     counter = 0
     while True:
         try:
-            print(f"No track id in the sheet so Im querying Spotify for: {search_str}")
+            print(
+                f"No track id in the sheet so Im querying Spotify for: {search_str}")
             result = spotify.search(search_str, type="track")
             # print(result)
             # exit()
@@ -144,7 +155,7 @@ def fetch_missing_track_id(row):
         except Exception:
             print("No match....or ", not_responding)
             sleep(0.5)
-            Logger.log(row)
+            songdata_logger.log(row)
             counter = counter + 1
             if counter > 2:
                 print(
@@ -198,10 +209,9 @@ def ensure_headers(sheet, sheet_title):
             sheet.update_cell(1, col_count, necessary_header)
 
 
-def fetch_openai(prompt,temperature):
+def fetch_openai(prompt, temperature):
     """ Fetches a reply from OpenAI's GPT-3 API"""
 
-        
     base_prompt = """
     I want you to act as a show designer for Weezer's upcoming summer tour. The show is divided into four segments of contrasting moods. 
     1. The Pop Party section will feature upbeat, cheerful songs with a more light-hearted message about love and relationships. It will be high energy and encourage the audience to participate in singing along and dancing.
@@ -268,15 +278,14 @@ def fetch_openai(prompt,temperature):
     """
     # post_prompt = 'Only return 1 of these 4 strings, corresponding to the type of song you think it is. Make sure you only return one of these 4 strings with no other text around it. Here are the 4 strings in a list: ["1. Pop Party", "2. Emotional Ballads", "3. Dark and Heavy", "4 . Fun and Uplifting"].'
 
-
     while True:
         try:
             reply = openai.Completion.create(
-                    model="text-davinci-003",
-                    prompt=prompt,
-                    temperature=temperature, # higher is more creative, lower is more boring
-                    max_tokens=2000, # speech tokens, not characters
-                )
+                model="text-davinci-003",
+                prompt=prompt,
+                temperature=temperature,  # higher is more creative, lower is more boring
+                max_tokens=2000,  # speech tokens, not characters
+            )
             break
         except Exception:
             print("OpenAI is not responding")
@@ -290,19 +299,20 @@ def get_args():
     if sys.argv[0] == "maintenance.py":
         sys.argv = ["songdata.py"]
     parser = argparse.ArgumentParser(
-    description='updates the data for existing rows in "Setlist", "Encyclopedia o Riffs", even FOB'
-)
+        description='updates the data for existing rows in "Setlist", "Encyclopedia o Riffs", even FOB'
+    )
     parser.add_argument(
-    "-s", "--sheet", help="the sheet you want to get data for", required=False, choices=["setlist", "encyclopedia", "setlist.data", "all"], default="all"
-)
+        "-s", "--sheet", help="the sheet you want to get data for", required=False, choices=["setlist", "encyclopedia", "setlist.data", "all"], default="all"
+    )
     parser.add_argument(
-    "-f", "--first", help="the first row you want to get data for", required=False
-)
+        "-f", "--first", help="the first row you want to get data for", required=False
+    )
     parser.add_argument(
-    "-m", "--method", help="the method you want to run", required=False, 
-    choices=["show_sections", "clean_lyrics","lyrics", "tempoEnergyDance", "viewcount", "releaseDate", "genres_artist_names", "durationsSongpopularityArtistidTrackid","all"], 
-    default="all"
-)
+        "-m", "--method", help="the method you want to run", required=False,
+        choices=["show_sections", "clean_lyrics", "lyrics", "tempoEnergyDance", "viewcount",
+                 "releaseDate", "genres_artist_names", "durationsSongpopularityArtistidTrackid", "all"],
+        default="all"
+    )
 
     # # https://stackoverflow.com/questions/45078474/required-is-an-invalid-argument-for-positionals-in-python-command
     # parser.add_argument(
@@ -336,7 +346,7 @@ def get_show_section_from_openai(row):
     # print(prompt)
 
     reply = fetch_openai(prompt, 0.89).strip()
-    print(row["song_title"],reply)
+    print(row["song_title"], reply)
     return reply
 
 
@@ -345,10 +355,11 @@ def get_spotify():
     client_id = os.environ.get("SPOTIFY_CLIENT_ID")
     client_secret = os.environ.get("SPOTIFY_CLIENT_SECRET")
     client_credentials_manager = SpotifyClientCredentials(
-    client_id=client_id, client_secret=client_secret
-)
+        client_id=client_id, client_secret=client_secret
+    )
 # sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
-    spotify = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+    spotify = spotipy.Spotify(
+        client_credentials_manager=client_credentials_manager)
     return spotify
 
 
@@ -357,14 +368,15 @@ def get_gspread_client():
     # get approved
     # scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/spreadsheets']
     scope = [
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive",
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/drive",
     ]
-    gspread_creds = ServiceAccountCredentials.from_json_keyfile_name(os.environ.get("ENCYCLOPEDIA_SERVICE_ACCOUNT"), scope)
+    gspread_creds = ServiceAccountCredentials.from_json_keyfile_name(
+        os.environ.get("ENCYCLOPEDIA_SERVICE_ACCOUNT"), scope)
 
     # print(gspread_creds)
     gspread_client = gspread.authorize(gspread_creds)
-    return gspread_creds,gspread_client
+    return gspread_creds, gspread_client
 
 
 # spotify artist method
@@ -417,7 +429,8 @@ def get_lyrics(data):
             ),
 
             try:
-                lyrics = lookupLyrics(row["artist_name"], row["song_title"], dense=True)
+                lyrics = lookupLyrics(
+                    row["artist_name"], row["song_title"], dense=True)
 
             except Exception as e:
                 print(e)
@@ -432,15 +445,15 @@ def get_lyrics(data):
 
 
 def get_sheetlist(args):
-    setlist_sheet = ("Setlist",0)
-    setlist_data_sheet = ("Setlist","data")
-    encyclopedia_sheet = ("Encyclopedia o' Riffs",0)
+    setlist_sheet = ("Setlist", 0)
+    setlist_data_sheet = ("Setlist", "data")
+    encyclopedia_sheet = ("Encyclopedia o' Riffs", 0)
     sheetlist = [setlist_sheet, encyclopedia_sheet]
     if args.sheet:
-            if args.sheet.lower() == "setlist":
-                sheetlist = [setlist_sheet]
-            elif args.sheet.lower() == "encyclopedia":
-                sheetlist = [encyclopedia_sheet]
+        if args.sheet.lower() == "setlist":
+            sheetlist = [setlist_sheet]
+        elif args.sheet.lower() == "encyclopedia":
+            sheetlist = [encyclopedia_sheet]
     return sheetlist
 
 
@@ -614,6 +627,8 @@ def show_sections(data):
     return data
 
 # spotify audio features method
+
+
 def tempoEnergyDance(data):
     print("getting tempoEnergyDance from spotify...", end="")
     for row in data:
@@ -664,9 +679,8 @@ def view_count(data):
 
         search_str = str(row["artist_name"]) + ", " + song_title
 
-        if debug:
-            # lookup youtube view count
-            print(f"\nLooking up viewCount on youtube for: {search_str}: ")
+        songdata_logger.debug(
+            f"\nLooking up viewCount on youtube for: {search_str}: ")
 
         try:
 
@@ -674,7 +688,9 @@ def view_count(data):
 
             # print(search_str, viewCount)
 
-        except:
+        except Exception as e:
+
+            songdata_logger.error(e)
 
             # viewCount = "-"
             viewCount = ""
@@ -685,7 +701,8 @@ def view_count(data):
             print(f"{song_title}: {viewCount:,}")
 
         data_row = next(
-            (x for x in data_sheet_data if str(x["song_title"]).lower() == str(row["song_title"]).lower()), None
+            (x for x in data_sheet_data if str(x["song_title"]).lower() == str(
+                row["song_title"]).lower()), None
         )
 
         if data_row != None:
@@ -693,8 +710,8 @@ def view_count(data):
         # else:
         #     data_row["youtube_views"] = ""
 
-
     gspreader.update_range(data_sheet, data_sheet_data)
+
 
 # Global Variables
 not_responding = (
@@ -705,22 +722,23 @@ header_row_in_sheet = 1
 args = get_args()
 sheetlist = get_sheetlist(args)
 
-starting_row = int(args.first) - 2 if args.first else header_row_in_sheet -1
+starting_row = int(args.first) - 2 if args.first else header_row_in_sheet - 1
 print("starting row in sheet", int(args.first) if args.first else "1")
 print("starting_row of data", starting_row)
 # method = args.method
 print("method", args.method)
 
-if args.method in ["durationsSongpopularityArtistidTrackid", "all", "tempoEnergyDance", "genres_artist_names" ]:
+if args.method in ["durationsSongpopularityArtistidTrackid", "all", "tempoEnergyDance", "genres_artist_names"]:
 
     spotify = get_spotify()
 
 gspread_creds, gspread_client = get_gspread_client()
 
+
 def main():
-    
+
     print("# let's skip the encyclopedia for now")
-    for sheet_tuple in [sheetlist[0]]: 
+    for sheet_tuple in [sheetlist[0]]:
 
         updated = False
 
@@ -755,18 +773,19 @@ def main():
             genres_artist_names(data[starting_row:])
             updated = True
 
-        if args.method in ["getlyrics","all"]: 
+        if args.method in ["getlyrics", "all"]:
             get_lyrics(data[starting_row:])
             updated = True
 
         if sheet_title == "Setlist.0":
 
-        #     if args.method in ["show_sections", "all"]:
-        #         show_sections(data[starting_row:])
-        #         updated = True
+            #     if args.method in ["show_sections", "all"]:
+            #         show_sections(data[starting_row:])
+            #         updated = True
 
             # Just for the Setlist.data tab. doesn't change anything in Setlist.0
-            if args.method in ["viewcount","all"]:  # or datetime.today().weekday() == 4:
+            # or datetime.today().weekday() == 4:
+            if args.method in ["viewcount", "all"]:
 
                 view_count(data[starting_row:])
 
