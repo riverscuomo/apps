@@ -20,6 +20,7 @@ Make sure you open a new terminal to activate the venv. Otherwise you'll be inst
 
 
 ### Install the packages in requirements.txt into the venv\Lib\site-packages directory
+Do this first:
 pip install -r requirements.txt
 
 You'll notice the local packages are not installed. That's because they are not in the requirements.txt file. You need to install them separately.
