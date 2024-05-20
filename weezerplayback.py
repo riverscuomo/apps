@@ -14,9 +14,12 @@ dest = f'{path}\Previous'
 # this pattern will match a version number in the format of 1.0.0
 # but not match with dates in the format of 2023-01-01
 version_pattern = re.compile(r'(\d+\.\d+\.\d+)')
+#     if only_starts_with:
 
-
-def move_named_als_files(name, num_keep):
+#         files_to_move = [file for file in ableton_files IF file.lower().startswith(name.lower())]
+#     else:
+# , only_starts_with=False
+def move_named_als_files(names: list[str], num_keep: int):
     """
     This function moves all .als files containing a specific name in their filenames 
     from a specified directory to a 'previous' subdirectory, keeping only the 
@@ -29,16 +32,19 @@ def move_named_als_files(name, num_keep):
     # get a list of files in the path
     files = os.listdir(path)
 
-    # filter in the files that have .als extension and the specified name in the filename
-    files = [file for file in files if file.endswith('.als') and name.lower() in file.lower()]
+    # get the files that have .als extension
+    ableton_files = [file for file in files if file.endswith('.als')]
+
+    # get the files that have any of the specified names in the filename
+    files_to_move = [file for file in ableton_files if any(name.lower() in file.lower() for name in names)]
 
     # sort the files by their modification time, descending (most recent first)
-    files.sort(key=lambda x: os.path.getmtime(os.path.join(path, x)), reverse=True)
+    files_to_move.sort(key=lambda x: os.path.getmtime(os.path.join(path, x)), reverse=True)
 
     print(f"All files: {files}")
 
-    # get the files that need to be moved
-    files_to_move = files[num_keep:]
+    # get the files that need to be moved (als files with the specified names)
+    files_to_move = files_to_move[num_keep:]
 
     print(f"Files to move: {files_to_move}")
 
@@ -149,9 +155,7 @@ def main():
 
     move_old_json_files()
 
-    move_named_als_files('scott', 2)
-
-    move_named_als_files('shriner', 2)
+    move_named_als_files(['scott', 'shriner', 'ss '], 2)
 
     return "Success!"
     

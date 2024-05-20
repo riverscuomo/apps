@@ -308,8 +308,17 @@ bandsweplaywith_import = Import(
     # skipper=True,
 )
 
+whoopdata_import = Import(
+    module_name="whoopdata",
+    description="updates the Health tab in the WHOOP DATA workbook. Fetches data from the whoop.com API.",
+    frequency=RunType.short,
+    # skipper=True,
+
+)
+
 all_imports = [
     pool_import,
+    whoopdata_import,
     new_albums_import,
     spotnik_import,
     kyoko_import,
