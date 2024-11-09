@@ -4,7 +4,7 @@ from iaqualink import AqualinkClient
 from rich import print
 from datetime import datetime
 from gspreader import get_sheet
-from convert import timestampToDateObject
+from rivertils.convert import timestamp_to_date_object
 from functools import wraps
 from asyncio.proactor_events import _ProactorBasePipeTransport
 from dotenv import load_dotenv
@@ -61,14 +61,14 @@ def getTemp():
 
     for row in data:      
         calDateString = row["date"] + " " + str(row["year"])
-        calDateDto = timestampToDateObject(calDateString).date()
+        calDateDto = timestamp_to_date_object(calDateString).date()
         if calDateDto == today:
             return int(row["pool"])
 
 
-def main():
-
-    print("pool.py main()...")
+def main(subscript_args):
+    # Use subscript_args as needed
+    print(f"pool.py main() received arguments: {subscript_args}")
 
     temp = getTemp()
     print(temp)

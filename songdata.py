@@ -18,9 +18,17 @@ from oauth2client import file, client, tools
 import openai
 from time import sleep
 from rich import print
+"""
+updates the data for existing rows in "Setlist", "Encyclopedia o' Riffs" using the following APIs:
+- spotify API
+- lyrics genius API
+- youtube API
+- openai API
+"""
 
-sys.path.insert(0, "C:\RC Dropbox\Rivers Cuomo\Apps\spotify")
-sys.path.insert(0, "C:\RC Dropbox\Rivers Cuomo\Apps")
+APPS_HOME = os.environ.get("APPS_HOME")
+sys.path.insert(0, f"{APPS_HOME}\spotify")
+sys.path.insert(0, f"{APPS_HOME}")
 
 
 songdata_logger.basicConfig(
@@ -32,13 +40,7 @@ songdata_logger.basicConfig(
 )
 
 
-"""
-updates the data for existing rows in "Setlist", "Encyclopedia o' Riffs" using the following APIs:
-- spotify API
-- lyrics genius API
-- youtube API
-- openai API
-"""
+
 
 print("\nsongdata.py")
 
@@ -177,23 +179,13 @@ def ensure_headers(sheet, sheet_title):
         "followers",
         "song_popularity",
         "artist_id",
-        # "loudness",
         "tempo_spotify",
-        # "time_signature_spotify",
-        # "key_spotify",
-        # "mode_spotify",
         "duration",
         "genres",
         "artist_popularity",
         "releaseDate",
         "lyrics",
         "youtube_views",
-        # "danceability",
-        # "energy",
-        # "speechiness",
-        # "acousticness",
-        # "instrumentalness",
-        # "liveness",
     ]
     col_count = sheet.col_count
 
@@ -735,7 +727,7 @@ if args.method in ["durationsSongpopularityArtistidTrackid", "all", "tempoEnergy
 gspread_creds, gspread_client = get_gspread_client()
 
 
-def main():
+def main(subscript_args):
 
     print("# let's skip the encyclopedia for now")
     for sheet_tuple in [sheetlist[0]]:

@@ -1,138 +1,167 @@
 import argparse
-import contextlib
+import enum
 import importlib
-import os
-import sys
 import traceback
 import gspreader
 from rich import print
-from maintenance_config import *
+from datetime import datetime
+import os
+import logging
+# Windows Task Scheduler runs all "longrun" programs here at 0:01 every morning.
 
-maintenance_parser = argparse.ArgumentParser(
-    description="Runs many modules in the Apps folder."
+# weeklyImports is on Monday.
+
+# "shortrun" is when you're running manually.
+
+# When you import, it imports all the code but doesn't run until you call main().
+# That's good.
+
+# TL; DR: I recommend using python -m to run a Python file, in order to add the current working directory to sys.path and enable relative imports.
+
+# Definitions
+# Script: Python file meant to be run with the command line interface.
+
+# Module: Python file meant to be imported.
+
+# Package: directory containing modules/packages. To run packages, these points may be helpful:
+
+# - don't have an __init__.py file in the top level of the package
+# - put `from .__main__ import main` in the __init__.py file of the inner package
+# - your main function should be in a file called __main__.py in the inner package
+# - all other modules should be in a lower level than the __main__.py file
+
+
+today = datetime.now()
+current_day_of_month = today.day
+current_day_of_week = today.weekday()
+pattern = "%A, %B %d,  %H:%M %p"
+pattern = "%B %d, %Y %H:%M %P"
+# patterin in 12 hour time
+pattern = "%B %d, %Y %I:%M %p"
+todayString = today.strftime(pattern)
+COMPUTERNAME = os.environ["COMPUTERNAME"]
+failure_message = "FAILURE!: \n\n"
+
+logging.basicConfig(
+    filename="maintenance_log.txt",
+    level=logging.INFO,
+    format="%(levelname)s: %(asctime)s %(message)s",
+    datefmt="%m/%d/%Y %I:%M:%S",
 )
-maintenance_parser.add_argument(
-    "-m",
-    "--module",
-    help="A specific module to run. simply put the name of one of the scripts (without the .py)",
-)
-maintenance_parser.add_argument(
-    "-t",
-    "--type",
-        help="The type of run: short, long, weekly, or biweekly. for a shortRun only: py maintenance.py -t short ",
-    choices=["short", "long", "weekly", "biweekly"],)
-args = maintenance_parser.parse_args()
-# print('args: ', args)
 
-"""
-    Windows Task Scheduler runs all "longrun" programs here at 0:01 every morning.
+class RunType(enum.Enum):
+    short = 1
+    long = 2
+    weekly = 3
+    biweekly = 4
+    monthly = 5
 
-    weeklyImports is on Monday.
+class Import:
+    def __init__(
+        self,
+        module_name: str,        
+        description: str,
+        
+        message: str,
+      
+        frequency: enum,
+          last_run_date: str=None,
+        module_path: str=None,
+        skipper=False,
+        date=today,
+        platform=COMPUTERNAME,
+        failure_message="",
+    ):
+        self.module_name = module_name
+        self.module_path = module_path or module_name
+        self.description = description
+        self.last_run_date = last_run_date
+        self.message = message
+        self.frequency = frequency
+        self.skipper = skipper
+        self.date = date
+        self.platform = platform
+        self.failure_message = failure_message
+    @classmethod
+    def from_dict(cls, data):
+        print(data)
 
-    "shortrun" is when you're running manually.
+        module_name = data["module_name"]
+        module_path = data.get("module_path", None)
+        last_run_date = data.get("last_run_date", None)
+        description = data["description"]
+        message = data.get("message", "")
+        frequency = RunType[data["frequency"]] if data.get("frequency") else None
+        skipper = data["status"].upper() != "TRUE" if "status" in data else False
+        date_value = data.get("date", today)
+        platform = data.get("platform", COMPUTERNAME)
+        failure_message = data.get("failure_message", "")
 
-    When you import, it imports all the code but doesn't run until you call main().
-    That's good.
-
-    TL; DR: I recommend using python -m to run a Python file, in order to add the current working directory to sys.path and enable relative imports.
-
-    Definitions
-    Script: Python file meant to be run with the command line interface.
-
-    Module: Python file meant to be imported.
-
-    Package: directory containing modules/packages. To run packages, these points may be helpful:
-
-    - don't have an __init__.py file in the top level of the package
-    - put `from .__main__ import main` in the __init__.py file of the inner package
-    - your main function should be in a file called __main__.py in the inner package
-    - all other modules should be in a lower level than the __main__.py file
-
-"""
-
-
-def add_skip_report(result: list):
-    """Add the skip report dictionary."""
-
-    result += [
-        build_skip_report(x)
-        for x in all_imports
-        if x.module_name not in [x["module_name"] for x in result]
-    ]
-
-    return result
-
-
-def build_skip_report(x):
-    return {
-        "last_run_date": todayString,
-        "module_name": x.module_name,
-        "description": x.description,
-        "message": "Skipped.",
-        "platform": x.platform,
-    }
-
-
-def clear_modules_from_sys(package_name, path):
-    """Remove all modules that were imported from this package so they don't conflict with future imports."""
-
-    # Remove this path so that it doesn't get in the way of future imports.
-    sys.path = [e for e in sys.path if path not in e]
-
-    # Remove all the modules that were imported from this package so they don't conflict
-    # with future imports.
-    loaded_package_modules = [
-        key for key, value in sys.modules.items() if package_name in str(value)
-    ]
-    for key in loaded_package_modules:
-        logging.info(f"deleting {key} from sys.modules")
-        del sys.modules[key]
+        return cls(
+            module_name=module_name,
+            description=description,
+            message=message,
+            last_run_date=last_run_date,
+            frequency=frequency,
+            module_path=module_path,
+            skipper=skipper,
+            date=date_value,
+            platform=platform,
+            failure_message=failure_message,
+        )
 
 
-def clear_paths():
-    """Remove paths that may conflict with this module import"""
-    APPS_HOME = os.environ["APPS_HOME"]
-
-    dead_paths = [
-        # "C:\\RC Dropbox\\Rivers Cuomo\\Apps",
-        f"{APPS_HOME}",
-        f"{APPS_HOME}\\credentials\\\\",
-        f"{APPS_HOME}\\catalog",
-        f"{APPS_HOME}\\new_albums",
-        f"{APPS_HOME}\\demos",
-        # ".",
-    ]
-    for d in dead_paths:
-        with contextlib.suppress(Exception):
-            sys.path.remove(d)
+    def to_dict(self):
+        return {
+            "module_name": self.module_name,
+            "module_path": self.module_path,
+            "description": self.description,
+            "last_run_date": self.last_run_date,
+            "message": getattr(self, 'message', ''),  # Use getattr to handle if 'message' might not exist
+            "frequency": self.frequency.name if self.frequency else None,
+            "status": "FALSE" if self.skipper else "TRUE",
+            "date": self.date,
+            "platform": self.platform,
+            "failure_message": self.failure_message,
+        }
 
 
-def consolidate_data(sheet_data, result_data):
-    """
-    Prep the results data for printing to the sheet. Update the data with any new results.
-    """
-    data = []
-
-    # First iterate through every row in the sheet.
-    for sheet_row in sheet_data:
-        # If this row has a new result in the results data, append it to data and continue to the next row of the sheet.
-        if result_row := in_data(sheet_row, result_data):
-            data.append(result_row)
-            continue
-
-        # Otherwise, append the sheet row to data.
-        data.append(sheet_row)
-
-    # Once you've gone through all the sheet rows and added any new results, add any results for modules that weren't previously part of the sheet.
-    for result_row in result_data:
-        if result_row is in_data(result_row, data):
-            continue
-        data.append(result_row)
-
-    return data
+    def __repr__(self):
+        return f"<Import module_name={self.module_name} || module_path={self.module_path} >"
 
 
-def fix_import_names():
+
+
+def create_main_parser():
+    """ Define the main argument parser """
+    parser = argparse.ArgumentParser(
+        description="Runs many modules in the Apps folder."
+    )
+    parser.add_argument(
+        "-m", "--module", help="A specific module to run."
+    )
+    parser.add_argument(
+        "-t", "--type", choices=["short", "long", "weekly", "biweekly"],
+        help="The type of run: short, long, weekly, or biweekly."
+    )
+    return parser
+
+def parse_args():
+    main_parser = create_main_parser()
+    args, remaining_argv = main_parser.parse_known_args()
+
+    if '--' in remaining_argv:
+        subscript_position = remaining_argv.index('--')
+        subscript_args = remaining_argv[subscript_position + 1:]
+        remaining_argv = remaining_argv[:subscript_position]
+    else:
+        subscript_args = []
+
+    return args, subscript_args
+
+
+
+def fix_import_names(all_imports):
     """Fix module name if I've passed the wrong name to the script argument."""
     module = args.module.lower()
 
@@ -163,12 +192,16 @@ def fix_import_names():
 
     # Then assign the import tuple as the only memeber of the imports list
     result = [x for x in all_imports if x.module_name.lower() == module]
+
+    if not result:
+        print('something wrong, did not find the module you specified in the config')
+        exit()
     print(f"imports={result}")
 
     return result
 
 
-def get_modules_to_run():
+def get_modules_to_run(all_imports: list[Import]):
     """ """
     runs = []
 
@@ -176,7 +209,7 @@ def get_modules_to_run():
     # Names don't need to be fixed if the modules were set from config because those have no errors.
     # It's just when you're running with a module specified at the command line that they may have errors.
     if args.module is not None:
-        imports = fix_import_names()
+        imports = fix_import_names(all_imports)
         runs.append(args.module)
 
     elif args.type is not None:
@@ -235,83 +268,40 @@ def get_modules_to_run():
     return imports
 
 
-def in_data(row, data):
-    return next((x for x in data if x["module_name"] == row["module_name"]), False)
-
-
-def initialize_import(this_import):
-    logging.info(" ")
-    logging.info(f"this_import={this_import}")
-
-    module_name = this_import.module_name
+def run_module(this_import: Import, subscript_args: list):
+    """Import a script from the current directory (Apps), run its main() function, and return the this_import."""
+    this_import.last_run_date = todayString
+    this_import.platform = COMPUTERNAME
     module_path = this_import.module_path
-    # # setup_file_name = (this_import.setup_file_name)  # will be None if it's simply a module within Apps
-    # path = this_import.path
-
-    # Initialize a new report object for this import
-    report = Report(todayString, module_name, this_import.description)
-
-    return module_name, module_path, report
-
-
-def print_result_to_sheet(result: list):
-    """Print the results of all the imports and runs to the log in Google Sheets."""
-    # print(result)
-
-    skipped = [x for x in all_imports if x.skipper]
-
-    skipped_result = [
-        {
-            "last_run_date": "",
-            "module_name": s.module_name,
-            "message": "Skipped.",
-            "description": s.description,
-            "platform": s.platform,
-        }
-        for s in skipped
-    ]
-
-    result_dicts = [vars(x) for x in result]
-    result_dicts += skipped_result
-
-    client = gspreader.get_client()
-    sheet = gspreader.get_sheet("Maintenance", "maintenance", client=client)
-    sheet_data = sheet.get_all_records()
-    data = consolidate_data(sheet_data, result_dicts)
-    gspreader.update_range(sheet, data)
-
-
-def run_module(report, module_path):
-    """Import a script from the current directory (Apps), run its main() function, and return the report."""
-    logging.info(f"Running {module_path}...")
-    new_module = importlib.import_module(module_path)
-    logging.info(f"Successfully imported {module_path}. Now time to run its main()....")
+    logging.info(f"Running {module_path} with args {subscript_args}...")
     try:
-        r = new_module.main()
+        new_module = importlib.import_module(module_path)
+    except Exception as e:
+        r = f"Failure to import {module_path}. <{e}>"
+        print(r)
+        this_import.message = r
+        
+        logging.error(r)
+        return this_import
+    try:
+        r = new_module.main(subscript_args)  
         message = str(r)
-        print(message)
-        report.message = message
         logging.info(message)
+        this_import.message = message
     except Exception as e:
         r = f"Failure in {module_path}.main(): <{traceback.format_exc()}>"
         print(r)
-        report.message = r
+        this_import.message = r
         logging.error(r)
-    return report
+    return this_import
 
-
-def run():
+def run(all_imports):
     logging.info("==========================================================")
     logging.info("MAINTENANCE.PY")
 
-    imports = get_modules_to_run()
-    logging.info(imports)
-
-    result = []
+    imports = get_modules_to_run(all_imports)
 
     for this_import in imports:
-
-        # Maybe I have to keep resetting this because the individual modules are changing it?
         logging.basicConfig(
             force=True,
             filename="maintenance_log.txt",
@@ -319,36 +309,31 @@ def run():
             format="%(levelname)s: %(asctime)s %(message)s",
             datefmt="%m/%d/%Y %I:%M:%S",
         )
-        module_name, module_path, report = initialize_import(this_import)
 
-        # clear_modules_from_sys(package_name, path) # this seems to mess up the module imports
 
-        try:
-            report = run_module(report, module_path)
-        except Exception as e:
-            additional_message = ""
-            r = f"Failure to import {module_name}. <{e}> + {additional_message}"
-            logging.error(r)
-            report.message = r
-
-        result.append(report)
-
-    for x in result:
-        logging.info(x.message)
-
-    return result
+        this_import = run_module(this_import, subscript_args)
 
 
 def main():
-    # print(f"Running maintenance.py with args {args}")
-    result = run()
-    print(result)
+    print(f"Running maintenance.py with args {args}")
 
-    print_to_sheet = True
+    sheet = gspreader.get_sheet("Maintenance", "maintenance")
 
-    if print_to_sheet:
-        print_result_to_sheet(result)
+    data = sheet.get_all_records()
+
+    all_imports = [Import.from_dict(x) for x in data]
+
+    run(all_imports)
+
+    data = [x.to_dict() for x in all_imports]
+
+    gspreader.update_range(sheet, data)
+
+
+
+args, subscript_args = parse_args()
 
 
 if __name__ == "__main__":
     main()
+

@@ -29,14 +29,14 @@ lyricleaner/
 lyricprocessor/
 ma/
 mp3tagger/
-# new_albums/
+new_albums/
 newmusic/
 pyexiftool/
 pyfy-master/
 riverscuomo_com_flask_server/
 riverscuomo_com_postgres/
 rivertils/
-# social/
+social/
 spotify-flask/
 spotifyplaylistsorter/
 spotnik/
@@ -48,11 +48,20 @@ ultimateplaylist/
 webserver/
 z-previous/
 
+_archive/
+ai/
+data/
+db/
+filetools/
+spotkin/
+
 kyoko_copy/
 maintenance_config_copy.py
 pool_copy.py
 
 # apps modules
+project_codebase.md
+
 anki.mp3
 ankiaudiofilename.py
 ankiDownloadGoogleTranslate.py
@@ -114,7 +123,7 @@ requirementsOld.txt
 save_filenames_to_txt.py
 setlistfm.py
 somfyMagic.py
-# songdata.py
+songdata.py
 songpopularity.py
 spotifytest.py
 sweetThings.txt
@@ -298,3 +307,5 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+game.py
+weezerplayback.py
