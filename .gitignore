@@ -309,3 +309,6 @@ cython_debug/
 #.idea/
 game.py
 weezerplayback.py
+dayoff.py
+copy_issues.py
+transfer_issues.py

@@ -11,9 +11,10 @@ Currently we're on 3.11.5
 
 `"C:\Users\aethe\AppData\Local\Programs\Python\Python311\python" -m venv .G`
 `"C:\Users\Rivers Cuomo\AppData\Local\Programs\Python\Python311\python.exe" -m venv .9`
+`"C:\Users\rcass\AppData\Local\Programs\Python\Python311\python.exe" -m venv .1`
 
 Make sure you open a new terminal to activate the venv. Otherwise you'll be installing packages into the global python environment.
-!!! activate with .9\Scripts\activate .G\Scripts\activate !!!
+!!! activate with .9\Scripts\activate .G\Scripts\activate .1\Scripts\activate !!!
 
 ### Install the packages in requirements.txt into the venv\Lib\site-packages directory
 
@@ -46,9 +47,9 @@ pip install -r requirements.txt && pip install -e ai/. && pip install -e anki/. 
 
 The last 2 are published on pypi, so you technically could put them in requirements.txt, but I don't want to do that because I want to be able to edit them locally and have the changes take effect immediately?
 
-### Add the environment variables to your system
+### Add the environment variables to your local system
 
-Find the environment variables in the .env file or look it up in other devices' System Environment Variables.
+Find the environment variables that are commented out in the .env file or look it up in other devices' System Environment Variables.
 
 ## Upgrading python
 
@@ -77,3 +78,21 @@ So if I ran `pip install -e .` on apps/, it wouldn't install all the projects in
 ## Daily Runs From the `Maintenance.py` Script
 
 I think maintenance.py is importing and running the (editable) installed version in .venv\Lib\site-packages\
+
+
+
+Correct Package Structure
+Here’s how your project should be structured for clarity and proper functionality:
+
+kotlin
+Copy code
+rivertils/                # Project root
+    setup.py              # Package setup script
+    rivertils/            # Actual Python package
+        __init__.py       # Marks this as a Python package
+        services/
+            __init__.py   # Marks this as a subpackage
+            services.py   # Contains your service functions
+Why the Top-Level __init__.py Causes Issues
+A top-level __init__.py makes Python treat the project root as part of the package. This can result in Python trying to resolve imports like rivertils.rivertils.services instead of rivertils.services.
+When installed in editable mode (pip install -e), Python might incorrectly register the package, leading to import errors.

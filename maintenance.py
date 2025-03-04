@@ -1,6 +1,7 @@
 import argparse
 import enum
 import importlib
+import sys
 import traceback
 import gspreader
 from rich import print
@@ -30,6 +31,8 @@ import logging
 # - your main function should be in a file called __main__.py in the inner package
 # - all other modules should be in a lower level than the __main__.py file
 
+# Add apps/ directory to the Python module search path
+sys.path.append(os.path.abspath(os.path.dirname(__file__)))
 
 today = datetime.now()
 current_day_of_month = today.day
@@ -130,8 +133,6 @@ class Import:
         return f"<Import module_name={self.module_name} || module_path={self.module_path} >"
 
 
-
-
 def create_main_parser():
     """ Define the main argument parser """
     parser = argparse.ArgumentParser(
@@ -146,6 +147,7 @@ def create_main_parser():
     )
     return parser
 
+
 def parse_args():
     main_parser = create_main_parser()
     args, remaining_argv = main_parser.parse_known_args()
@@ -158,7 +160,6 @@ def parse_args():
         subscript_args = []
 
     return args, subscript_args
-
 
 
 def fix_import_names(all_imports):
@@ -196,7 +197,7 @@ def fix_import_names(all_imports):
     if not result:
         print('something wrong, did not find the module you specified in the config')
         exit()
-    print(f"imports={result}")
+    # print(f"imports={result}")
 
     return result
 
@@ -260,7 +261,7 @@ def get_modules_to_run(all_imports: list[Import]):
                 imports += [x for x in all_imports if x.frequency == RunType.monthly]
                 runs.append("monthlyImports")
 
-    print(f"RunTypes={runs}")
+    # print(f"RunTypes={runs}")
 
         # remove imports that you don't need to run these days
     imports = [x for x in imports if not x.skipper]
@@ -295,6 +296,7 @@ def run_module(this_import: Import, subscript_args: list):
         logging.error(r)
     return this_import
 
+
 def run(all_imports):
     logging.info("==========================================================")
     logging.info("MAINTENANCE.PY")
@@ -302,13 +304,13 @@ def run(all_imports):
     imports = get_modules_to_run(all_imports)
 
     for this_import in imports:
-        logging.basicConfig(
-            force=True,
-            filename="maintenance_log.txt",
-            level=logging.INFO,
-            format="%(levelname)s: %(asctime)s %(message)s",
-            datefmt="%m/%d/%Y %I:%M:%S",
-        )
+        # logging.basicConfig(
+        #     force=True,
+        #     filename="maintenance_log.txt",
+        #     level=logging.INFO,
+        #     format="%(levelname)s: %(asctime)s %(message)s",
+        #     datefmt="%m/%d/%Y %I:%M:%S",
+        # )
 
 
         this_import = run_module(this_import, subscript_args)
@@ -332,6 +334,7 @@ def main():
 
 
 args, subscript_args = parse_args()
+
 
 
 if __name__ == "__main__":
